@@ -140,11 +140,19 @@
 (ws-butler-global-mode)
 
 ;(add-hook 'c-mode-hook #'display-fill-column-indicator-mode)
+
+;; line numbers
 (add-hook 'prog-mode-hook
           (lambda ()
             (interactive)
             (display-line-numbers-mode)
             (setq display-line-numbers 'relative)))
+
+;; highlight todos
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (interactive)
+            (highlight-regexp "TODO:" 'diff-error)))
 
 (require 'splash-screen)
 
@@ -195,4 +203,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
