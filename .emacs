@@ -132,6 +132,9 @@
         "https://rss.slashdot.org/Slashdot/slashdotMain"
         "https://text.causal.agency/feed.atom"))
 
+(require 'lsp)
+(add-hook 'java-mode-hook #'lsp)
+
 (setq make-backup-files nil)
 (setq-default indent-tabs-mode nil)
 (global-undo-tree-mode)
@@ -203,4 +206,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
