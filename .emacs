@@ -27,17 +27,8 @@
   (require 'ligature)
   (global-prettify-symbols-mode t)
   ;; gen ligatures for up to 80 dash || equals symbols
-  (setq dash-ligatures
-        (mapcar
-         (lambda (x)
-           (apply #'concat (mapcar (lambda (_) "-") (number-sequence 1 x))))
-         (number-sequence 2 80)))
-
-  (setq eq-ligatures
-        (mapcar
-         (lambda (x)
-           (apply #'concat (mapcar (lambda (_) "=") (number-sequence 1 x))))
-         (number-sequence 2 80)))
+  (setq long-ligatures '(?- ?= ?_ ?*))
+  (setq lig (apply #'append (mapcar (lambda (x) (mapcar (lambda (ch) (make-string x ch)) long-ligatures)) (number-sequence 2 80))))
 
   (ligature-set-ligatures 't '("www"))
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
@@ -57,8 +48,7 @@
       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
       "\\\\" "://")
-    dash-ligatures
-    eq-ligatures)))
+    lig)))
 
 (defun rc/define-keybindings ()
   (evil-define-key '(normal visual) 'global (kbd "]]")
@@ -85,7 +75,10 @@
   (add-to-list 'load-path additional-lisp-path)
   (rc/download-file
    "https://raw.githubusercontent.com/rougier/emacs-splash/master/splash-screen.el"
-   (concat additional-lisp-path "splash-screen.el")))
+   (concat additional-lisp-path "splash-screen.el"))
+  (rc/download-file
+   "https://pub.krzysckh.org/wttrin.el"
+   (concat additional-lisp-path "wttrin.el")))
 
 (setq additional-lisp-path "~/.emacs.d/lisp/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
@@ -105,6 +98,7 @@
 (defun about-emacs ()
   (switch-to-buffer "*scratch*"))
 
+(require 'wttrin)
 (require 'package)
 (setq package-install-upgrade-built-in t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
