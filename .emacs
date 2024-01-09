@@ -109,6 +109,8 @@
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
 
+(add-hook 'rust-mode-hook 'electric-pair-mode)
+
 (require 'lice)
 (setq lice:default-license "bsd-2-clause")
 (setq lice:copyright-holder "krzysckh <kpm@linux.pl>")
