@@ -46,7 +46,7 @@
       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-      "\\\\" "://")
+      "\\\\" "://" ";;;")
     lig)))
 
 (defun rc/define-keybindings ()
@@ -84,7 +84,13 @@
    (concat additional-lisp-path "splash-screen.el"))
   (rc/download-file
    "https://pub.krzysckh.org/wttrin.el"
-   (concat additional-lisp-path "wttrin.el")))
+   (concat additional-lisp-path "wttrin.el"))
+  (rc/download-file
+   "https://pub.krzysckh.org/kto.el"
+   (concat additional-lisp-path "kto.el"))
+  (rc/download-file
+   "https://raw.githubusercontent.com/krzysckh/rcon.el/master/rcon.el"
+   (concat additional-lisp-path "rcon.el")))
 
 (setq additional-lisp-path "~/.emacs.d/lisp/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
@@ -115,8 +121,6 @@
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
 
-(add-hook 'rust-mode-hook 'electric-pair-mode)
-
 (require 'lice)
 (setq lice:default-license "bsd-2-clause")
 (setq lice:copyright-holder "krzysckh <kpm@linux.pl>")
@@ -143,6 +147,9 @@
 (global-ligature-mode t)
 (editorconfig-mode 1)
 (ws-butler-global-mode)
+
+(require 'rcon)
+(require 'kto)
 
 ;(add-hook 'c-mode-hook #'display-fill-column-indicator-mode)
 
