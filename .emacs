@@ -17,10 +17,9 @@
   (require 'evil-collection)
   (require 'evil-numbers)
   (evil-mode 1)
-  (global-set-key (kbd "C-k") 'comment-dwim)
   (global-set-key (kbd "C-a") 'evil-numbers/inc-at-pt)
   (global-set-key (kbd "C-S-a") 'evil-numbers/dec-at-pt)
-  (define-key evil-normal-state-map (kbd ";") 'compile)
+
   (evil-collection-init))
 
 (defun rc/define-ligatures ()
@@ -61,7 +60,14 @@
   (define-key evil-normal-state-map (kbd "<backspace>")
     (lambda ()
       (interactive)
-      (switch-to-buffer (other-buffer)))))
+      (switch-to-buffer (other-buffer))))
+  (evil-define-key '(normal visual) 'global (kbd "|") #'shell-command-on-region)
+  (evil-define-key 'normal 'global (kbd ";") #'compile)
+  (global-set-key (kbd "C-k") 'comment-dwim)
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-h x") #'helpful-command))
 
 (defun rc/download-file (url path)
   (when (not (file-exists-p path))
@@ -202,4 +208,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
