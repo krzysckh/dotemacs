@@ -166,6 +166,15 @@
             (interactive)
             (highlight-regexp "TODO:" 'diff-error)))
 
+;; TODO: do innego pliku idk.. ~/.emacs.d/lisp/util.el idk idk idk
+(defun plan ()
+  (interactive)
+
+  (setq shell-command-buffer-name-async "*plan*")
+  (get-buffer-create "*plan*")
+  (switch-to-buffer "*plan*")
+  (async-shell-command "plan"))
+
 (require 'splash-screen)
 
 (custom-set-faces
