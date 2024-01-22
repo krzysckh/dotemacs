@@ -135,11 +135,29 @@
         "https://nullprogram.com/feed/"
         "https://9lab.org/blog/index.xml"
         "https://100r.co/links/rss.xml"
-        "https://rss.slashdot.org/Slashdot/slashdotMain"
         "https://text.causal.agency/feed.atom"))
 
 (require 'lsp)
 (add-hook 'java-mode-hook #'lsp)
+
+(require 'web-mode)
+(setq web-mode-code-indent-offset 2)
+(setq web-mode-attr-indent-offset 2)
+(setq web-mode-markup-indent-offset 2)
+(setq web-mode-css-indent-offset 2)
+(setq web-mode-sql-indent-offset 2)
+
+(require 'company-web)
+(defun run-company-web ()
+  (add-to-list 'company-backends 'company-web-html)
+  (add-to-list 'company-backends 'company-web-jade)
+  (add-to-list 'company-backends 'company-web-slim))
+
+(add-hook 'web-mode-hook #'run-company-web)
+(add-hook 'html-mode-hook #'run-company-web)
+(add-hook 'js-mode-hook #'run-company-web)
+(add-hook 'css-mode-hook #'run-company-web)
+(add-hook 'sql-mode-hook #'run-company-web)
 
 (setq make-backup-files nil)
 (setq-default indent-tabs-mode nil)
@@ -149,6 +167,7 @@
 (ws-butler-global-mode)
 (setq ido-everywhere t)
 (ido-mode 1)
+(global-company-mode)
 
 (require 'rcon)
 (require 'kto)
@@ -156,17 +175,19 @@
 ;(add-hook 'c-mode-hook #'display-fill-column-indicator-mode)
 
 ;; line numbers
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (interactive)
-            (display-line-numbers-mode)
-            (setq display-line-numbers 'relative)))
+(add-hook
+ 'prog-mode-hook
+ (lambda ()
+   (interactive)
+   (display-line-numbers-mode)
+   (setq display-line-numbers 'relative)))
 
 ;; highlight todos
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (interactive)
-            (highlight-regexp "TODO:" 'diff-error)))
+(add-hook
+ 'prog-mode-hook
+(lambda ()
+   (interactive)
+   (highlight-regexp "TODO:" 'diff-error)))
 
 ;; TODO: do innego pliku idk.. ~/.emacs.d/lisp/util.el idk idk idk
 (defun plan ()
@@ -226,4 +247,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
