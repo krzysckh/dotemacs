@@ -62,6 +62,7 @@
       (interactive)
       (switch-to-buffer (other-buffer))))
   (evil-define-key '(normal visual) 'global (kbd "|") #'shell-command-on-region)
+
   (evil-define-key 'normal 'global (kbd ";") #'compile)
   (global-set-key (kbd "C-k") 'comment-dwim)
   (global-set-key (kbd "C-h f") #'helpful-callable)
@@ -91,6 +92,9 @@
   (rc/download-file
    "https://raw.githubusercontent.com/krzysckh/rcon.el/master/rcon.el"
    (concat additional-lisp-path "rcon.el")))
+  ;; (rc/download-file
+  ;;  "https://pub.krzysckh.org/simpc-mode.el"
+  ;;  (concat additional-lisp-path "simpc-mode.el")))
 
 (setq additional-lisp-path "~/.emacs.d/lisp/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
@@ -117,7 +121,7 @@
 ;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
 (require 'eglot)
-(add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-16"))
+(add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-16" "--fallback-style=none"))
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
 
@@ -158,6 +162,28 @@
 (add-hook 'js-mode-hook #'run-company-web)
 (add-hook 'css-mode-hook #'run-company-web)
 (add-hook 'sql-mode-hook #'run-company-web)
+
+;; (require 'simpc-mode)
+;; (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
+
+(setq c-astyle-command "astyle --style=mozilla --indent=spaces=2 -xB")
+(defun astyle (pmin pmax)
+  (interactive "r")
+  (shell-command-on-region
+   pmin pmax
+   c-astyle-command
+   (current-buffer) t
+   (get-buffer-create "*Astyle Errors*") t))
+
+(require 'php-mode)
+(add-hook
+ 'php-mode-hook
+ (lambda ()
+    (require 'company-php)
+    (ac-php-core-eldoc-setup)
+    (set (make-local-variable 'company-backends)
+         '((company-ac-php-backend company-dabbrev-code)
+           company-capf company-files))))
 
 (setq make-backup-files nil)
 (setq-default indent-tabs-mode nil)
@@ -247,4 +273,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
