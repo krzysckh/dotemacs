@@ -185,6 +185,24 @@
          '((company-ac-php-backend company-dabbrev-code)
            company-capf company-files))))
 
+(require 'impatient-mode)
+(defun markdown-html (buffer)
+  (princ
+   (with-current-buffer buffer
+     (format "<!DOCTYPE html><html><title></title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://ndossougbe.github.io/strapdown/dist/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
+   (current-buffer)))
+
+(imp-set-user-filter #'markdown-html)
+(add-hook
+ 'markdown-mode-hook
+ (lambda ()
+   (httpd-start)
+   (impatient-mode t)
+   (imp-set-user-filter #'markdown-html)
+   (call-process-shell-command "sh -c 'xdg-open http://localhost:8080/imp'")))
+
+
+(setq confirm-kill-emacs 'y-or-n-p)
 (setq make-backup-files nil)
 (setq-default indent-tabs-mode nil)
 (global-undo-tree-mode)
@@ -211,7 +229,7 @@
 ;; highlight todos
 (add-hook
  'prog-mode-hook
-(lambda ()
+ (lambda ()
    (interactive)
    (highlight-regexp "TODO:" 'diff-error)))
 
@@ -273,4 +291,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
