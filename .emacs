@@ -242,6 +242,10 @@
   (switch-to-buffer "*plan*")
   (async-shell-command "plan"))
 
+(defun zzz ()
+  (interactive)
+  (zone 'zone-pgm-five-oclock-swan-dive))
+
 (require 'splash-screen)
 
 (custom-set-faces
