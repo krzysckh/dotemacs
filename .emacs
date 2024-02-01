@@ -219,12 +219,10 @@
 ;(add-hook 'c-mode-hook #'display-fill-column-indicator-mode)
 
 ;; line numbers
-(add-hook
- 'prog-mode-hook
- (lambda ()
-   (interactive)
-   (display-line-numbers-mode)
-   (setq display-line-numbers 'relative)))
+(defun run-line-mode ()
+  (display-line-numbers-mode)
+  (setq display-line-numbers 'relative))
+(add-hook 'prog-mode-hook #'run-line-mode)
 
 ;; highlight todos
 (add-hook
@@ -244,7 +242,14 @@
 
 (defun zzz ()
   (interactive)
-  (zone 'zone-pgm-five-oclock-swan-dive))
+  (setq zone-programs '(zone-pgm-five-oclock-swan-dive))
+  (with-current-buffer (get-buffer-create "*zone*")
+    (run-line-mode))
+  (zone))
+
+(defun reload-file-variables ()
+  (interactive)
+  (normal-mode))
 
 (require 'splash-screen)
 
