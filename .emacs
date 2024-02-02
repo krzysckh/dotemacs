@@ -242,7 +242,12 @@
 
 (defun zzz ()
   (interactive)
-  (setq zone-programs '(zone-pgm-five-oclock-swan-dive))
+  (require 'zone)
+  ;; difference between emacs 29.1 on my laptop, and whatever i have on my debian
+  (cond
+   ((listp zone-programs) (setq zone-programs '(zone-pgm-five-oclock-swan-dive)))
+   ((arrayp zone-programs) (setq zone-programs [zone-pgm-five-oclock-swan-dive])))
+
   (with-current-buffer (get-buffer-create "*zone*")
     (run-line-mode))
   (zone))
