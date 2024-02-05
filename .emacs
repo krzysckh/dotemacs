@@ -166,7 +166,7 @@
 ;; (require 'simpc-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
 
-(setq c-astyle-command "astyle --style=mozilla --indent=spaces=2 -xB")
+(setq c-astyle-command "astyle --style='k&r' --indent=spaces=2 -xB")
 (defun astyle (pmin pmax)
   (interactive "r")
   (shell-command-on-region
