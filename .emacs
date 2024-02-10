@@ -112,6 +112,7 @@
 (rc/download-lispfiles)
 
 (defun about-emacs ()
+  (interactive)
   (switch-to-buffer "*scratch*"))
 
 (require 'wttrin)
@@ -143,6 +144,7 @@
 
 (require 'lsp)
 (add-hook 'java-mode-hook #'lsp)
+(add-hook 'lsp-mode-hook (lambda () (lsp-headerline-breadcrumb-mode 0)))
 
 (require 'web-mode)
 (setq web-mode-code-indent-offset 2)
