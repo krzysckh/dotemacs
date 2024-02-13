@@ -64,6 +64,9 @@
   (evil-define-key '(normal visual) 'global (kbd "|") #'shell-command-on-region)
 
   (evil-define-key 'normal 'global (kbd ";") #'compile)
+  (global-set-key (kbd "C-x C-b") (lambda ()
+                                    (interactive)
+                                    (execute-extended-command "" "switch-to-buffer")))
   (global-set-key (kbd "C-k") 'comment-dwim)
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -214,6 +217,7 @@
 (setq ido-everywhere t)
 (ido-mode 1)
 (global-company-mode)
+(global-hl-line-mode)
 
 (require 'rcon)
 (require 'kto)
@@ -307,4 +311,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(chordpro-mode impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
