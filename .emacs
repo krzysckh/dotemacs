@@ -64,14 +64,28 @@
   (evil-define-key '(normal visual) 'global (kbd "|") #'shell-command-on-region)
 
   (evil-define-key 'normal 'global (kbd ";") #'compile)
-  (global-set-key (kbd "C-x C-b") (lambda ()
-                                    (interactive)
-                                    (execute-extended-command "" "switch-to-buffer")))
+  (global-set-key
+   (kbd "C-x C-b")
+   (lambda ()
+     (interactive)
+     (execute-extended-command "" "switch-to-buffer")))
+
+  (evil-define-key 'normal 'global (kbd "+")
+    (lambda ()
+      (interactive)
+      (enlarge-window-horizontally 5)))
+
+  (evil-define-key 'normal 'global (kbd "-")
+    (lambda ()
+      (interactive)
+      (shrink-window-horizontally 5)))
+
   (global-set-key (kbd "C-k") 'comment-dwim)
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
   (global-set-key (kbd "C-h k") #'helpful-key)
   (global-set-key (kbd "C-h x") #'helpful-command))
+(rc/define-keybindings)
 
 (defun rc/download-file (url path)
   (when (not (file-exists-p path))
@@ -217,7 +231,6 @@
 (setq ido-everywhere t)
 (ido-mode 1)
 (global-company-mode)
-(global-hl-line-mode)
 
 (require 'rcon)
 (require 'kto)
