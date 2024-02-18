@@ -141,6 +141,9 @@
 (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-16" "--fallback-style=none"))
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
+(add-hook
+ 'eglot-inlay-hints-mode
+ (lambda () (interactive) (eglot-inlay-hints-mode -1)))
 
 (require 'lice)
 (setq lice:default-license "bsd-2-clause")
