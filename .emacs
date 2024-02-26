@@ -119,7 +119,10 @@
   (rc/load-theme 'everforest-hard-dark)
   (rc/set-font "Lilex" "12"))
  (t
-  (rc/load-theme 'acme)
+  (let ((h (string-to-number (format-time-string "%H"))))
+    (if (or (<= h 7) (>= h 20))
+        (rc/load-theme 'gruber-darker)
+      (rc/load-theme 'acme)))
   (rc/set-font "Lilex" "9")))
 (rc/load-evil)
 (rc/define-ligatures)
@@ -257,16 +260,18 @@
   (interactive)
 
   (setq shell-command-buffer-name-async "*plan*")
-  (get-buffer-create "*plan*")
-  (switch-to-buffer "*plan*")
-  (async-shell-command "plan"))
+  (with-current-buffer (get-buffer-create "*plan*")
+    (switch-to-buffer "*plan*")
+    (async-shell-command "plan")
+    (read-only-mode)
+    (text-scale-adjust -1)))
 
 (defun zzz ()
   (interactive)
   (require 'zone)
   ;; difference between emacs 29.1 on my laptop, and whatever i have on my debian
   (cond
-   ((listp zone-programs) (setq zone-programs '(zone-pgm-five-oclock-swan-dive)))
+   ((listp zone-programs)  (setq zone-programs '(zone-pgm-five-oclock-swan-dive)))
    ((arrayp zone-programs) (setq zone-programs [zone-pgm-five-oclock-swan-dive])))
 
   (with-current-buffer (get-buffer-create "*zone*")
@@ -326,4 +331,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(rc-mode dockerfile-mode try keycast chordpro-mode impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
