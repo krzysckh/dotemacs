@@ -282,6 +282,11 @@
   (interactive)
   (normal-mode))
 
+(defun kill-all-buffers ()
+  (interactive)
+  (when (y-or-n-p "kill-all-buffers?")
+    (mapcar #'kill-buffer (mapcar #'buffer-name (buffer-list)))))
+
 (require 'splash-screen)
 
 (custom-set-faces
