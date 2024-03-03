@@ -91,26 +91,19 @@
     (require 'url)
     (url-copy-file url path)))
 
+(defun rc/require-lisp (url)
+  (rc/download-file url (concat additional-lisp-path (car (last (split-string url "/"))))))
+
 (defun rc/download-lispfiles ()
   (when (not (file-directory-p additional-lisp-path))
     (mkdir additional-lisp-path))
 
   (add-to-list 'load-path additional-lisp-path)
-  (rc/download-file
-   "https://raw.githubusercontent.com/rougier/emacs-splash/master/splash-screen.el"
-   (concat additional-lisp-path "splash-screen.el"))
-  (rc/download-file
-   "https://pub.krzysckh.org/wttrin.el"
-   (concat additional-lisp-path "wttrin.el"))
-  (rc/download-file
-   "https://pub.krzysckh.org/kto.el"
-   (concat additional-lisp-path "kto.el"))
-  (rc/download-file
-   "https://raw.githubusercontent.com/krzysckh/rcon.el/master/rcon.el"
-   (concat additional-lisp-path "rcon.el")))
-  ;; (rc/download-file
-  ;;  "https://pub.krzysckh.org/simpc-mode.el"
-  ;;  (concat additional-lisp-path "simpc-mode.el")))
+  (rc/require-lisp "https://raw.githubusercontent.com/rougier/emacs-splash/master/splash-screen.el")
+  (rc/require-lisp "https://pub.krzysckh.org/wttrin.el")
+  (rc/require-lisp "https://pub.krzysckh.org/kto.el")
+  (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/rcon.el/master/rcon.el")
+  (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/yt-search.el/master/yt-search.el"))
 
 (setq additional-lisp-path "~/.emacs.d/lisp/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
@@ -249,6 +242,7 @@
 
 (require 'rcon)
 (require 'kto)
+(require 'yt-search)
 
 ;(add-hook 'c-mode-hook #'display-fill-column-indicator-mode)
 
