@@ -153,6 +153,11 @@
 (setq lice:copyright-holder "krzysckh <kpm@linux.pl>")
 
 (require 'elfeed)
+
+(setq browse-url-handlers (list (cons ".*youtube.com.*" #'yt-handler)))
+(defun yt-handler (url &rest args)
+  (call-process-shell-command (concat "sh -c \"yt '" url "'\"") nil 0))
+
 (setq elfeed-feeds
       '("http://9front.org/releases/index.rss"
         "http://harmful.cat-v.org/Blog/index.rss"
@@ -163,6 +168,11 @@
         "https://9lab.org/blog/index.xml"
         "https://100r.co/links/rss.xml"
         "https://text.causal.agency/feed.atom"))
+
+;; https://github.com/krzysckh/bin/blob/master/subjson2elfeed.pl
+(when (file-exists-p "~/.elfeed-yt")
+  (load "~/.elfeed-yt")
+  (setq elfeed-feeds (append elfeed-feeds elfeed-youtube-rss-feeds)))
 
 (require 'lsp)
 (add-hook 'java-mode-hook #'lsp)
@@ -336,4 +346,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
