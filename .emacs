@@ -151,6 +151,13 @@
 (defun yt-handler (url &rest args)
   (call-process-shell-command (concat "sh -c \"mpv '" url "'\"") nil 0))
 
+(defun elfeed-update-yt (auth)
+  (interactive
+   (list (read-string "piped.video Authorization: ")))
+  (call-process-shell-command
+   (concat "sh -c 'curl -H \"Authorization: " auth "\" https://pipedapi.kavin.rocks/subscriptions > /tmp/sub.json"
+           " && subjson2elfeed.pl /tmp/sub.json")))
+
 (setq elfeed-feeds
       '("http://9front.org/releases/index.rss"
         "http://harmful.cat-v.org/Blog/index.rss"
