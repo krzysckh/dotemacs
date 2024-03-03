@@ -156,7 +156,7 @@
 
 (setq browse-url-handlers (list (cons ".*youtube.com.*" #'yt-handler)))
 (defun yt-handler (url &rest args)
-  (call-process-shell-command (concat "sh -c \"yt '" url "'\"") nil 0))
+  (call-process-shell-command (concat "sh -c \"mpv '" url "'\"") nil 0))
 
 (setq elfeed-feeds
       '("http://9front.org/releases/index.rss"
