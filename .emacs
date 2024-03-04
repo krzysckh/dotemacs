@@ -80,6 +80,9 @@
       (interactive)
       (shrink-window-horizontally 5)))
 
+  (evil-collection-define-key '(normal visual) 'elfeed-search-mode-map
+    "r" 'elfeed-search-untag-all-unread)
+
   (global-set-key (kbd "C-k") 'comment-dwim)
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
