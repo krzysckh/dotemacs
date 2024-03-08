@@ -292,6 +292,20 @@
     (run-line-mode))
   (zone))
 
+(defun search-in-evil-collection (mode)
+  "searches evil-collection for `mode' and - if found - opens up a new buffer with the file that defines keybindings for it"
+  (interactive
+   (let ((cur (symbol-name major-mode)))
+     (list (read-string (concat "search for mode [default: " cur "]: ") nil nil cur))))
+  (let* ((files (cl-delete-if-not
+                 (lambda (s) (and (string-match-p mode s) (string-match-p ".*\\.el$" s)))
+                 (directory-files-recursively (car (file-expand-wildcards "~/.emacs.d/elpa/evil-collection*")) "")))
+         (chosen (cond
+                  ((> (length files) 1) (ido-completing-read "Select file to open: " files))
+                  ((equal (length files) 0) (error "not found in evil-collection"))
+                  (t (car files)))))
+    (find-file chosen)))
+
 (defun reload-file-variables ()
   (interactive)
   (normal-mode))
