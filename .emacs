@@ -194,6 +194,15 @@
 ;; (require 'simpc-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
 
+(require 'eglot-quicklintjs)
+(defun load-eglot-quicklintjs ()
+  (interactive)
+  (eglot-ensure))
+
+(setq js-indent-level 2)
+(add-hook 'js-mode-hook #'load-eglot-quicklintjs)
+(add-hook 'typescript-ts-mode #'load-eglot-quicklintjs)
+
 (setq c-astyle-command "astyle --style='k&r' --indent=spaces=2 -xB")
 (defun astyle (pmin pmax)
   (interactive "r")
