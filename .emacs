@@ -188,17 +188,8 @@
 (setq web-mode-css-indent-offset 2)
 (setq web-mode-sql-indent-offset 2)
 
-(require 'company-web)
-(defun run-company-web ()
-  (add-to-list 'company-backends 'company-web-html)
-  (add-to-list 'company-backends 'company-web-jade)
-  (add-to-list 'company-backends 'company-web-slim))
-
-(add-hook 'web-mode-hook #'run-company-web)
-(add-hook 'html-mode-hook #'run-company-web)
-(add-hook 'js-mode-hook #'run-company-web)
-(add-hook 'css-mode-hook #'run-company-web)
-(add-hook 'sql-mode-hook #'run-company-web)
+;; $ npm install -g vscode-css-languageserver-bin
+(add-to-list 'auto-mode-alist `("\\.css\\'" . ,(lambda () (web-mode) (lsp))))
 
 ;; (require 'simpc-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
