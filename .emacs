@@ -116,7 +116,7 @@
   (rc/set-font "Lilex" "12"))
  (t
   (let ((h (string-to-number (format-time-string "%H"))))
-    (if (or (<= h 7) (>= h 20))
+    (if (or (<= h 7) (>= h 20) (getenv "EMACS_DARK_MODE"))
         (rc/load-theme 'gruber-darker)
       (rc/load-theme 'acme)))
   (rc/set-font "Lilex" "9")))
