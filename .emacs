@@ -201,7 +201,6 @@
 
 (setq js-indent-level 2)
 (add-hook 'js-mode-hook #'load-eglot-quicklintjs)
-(add-hook 'typescript-ts-mode #'load-eglot-quicklintjs)
 
 (setq c-astyle-command "astyle --style='k&r' --indent=spaces=2 -xB")
 (defun astyle (pmin pmax)
@@ -364,4 +363,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
