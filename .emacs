@@ -126,6 +126,11 @@
 
 (rc/download-lispfiles)
 
+(when (not (file-exists-p "~/.lice"))
+  (make-directory "~/.lice"))
+
+(rc/download-file "https://pub.krzysckh.org/bsd-3-clause-clear" "~/.lice/bsd-3-clause-clear")
+
 (defun about-emacs ()
   (interactive)
   (switch-to-buffer "*scratch*"))
@@ -145,8 +150,9 @@
  (lambda () (interactive) (eglot-inlay-hints-mode -1)))
 
 (require 'lice)
-(setq lice:default-license "bsd-2-clause")
-(setq lice:copyright-holder "krzysckh <kpm@linux.pl>")
+(add-to-list 'lice:license-directories "~/.lice")
+(setq lice:default-license "bsd-3-clause-clear")
+(setq lice:copyright-holder "Krzysztof Michałczyk <kpm@linux.pl>")
 
 (require 'elfeed)
 
