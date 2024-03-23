@@ -176,7 +176,9 @@
         "https://nullprogram.com/feed/"
         "https://9lab.org/blog/index.xml"
         "https://100r.co/links/rss.xml"
-        "https://text.causal.agency/feed.atom"))
+        "https://text.causal.agency/feed.atom"
+        "https://www.spoj.com/FRAKTAL/rss/"
+        ))
 
 ;; https://github.com/krzysckh/bin/blob/master/subjson2elfeed.pl
 (when (file-exists-p "~/.elfeed-yt")
@@ -185,7 +187,7 @@
 
 (require 'lsp)
 (add-hook 'java-mode-hook #'lsp)
-(add-hook 'lsp-mode-hook (lambda () (lsp-headerline-breadcrumb-mode 0)))
+(setq lsp-headerline-breadcrumb-enable 0)
 
 (require 'web-mode)
 (setq web-mode-code-indent-offset 2)
