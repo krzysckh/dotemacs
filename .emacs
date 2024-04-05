@@ -118,7 +118,8 @@
 (cond
  ((string= system-name "chad")
   (rc/load-theme 'everforest-hard-dark)
-  (rc/set-font "Lilex" "12"))
+  (rc/set-font "Lilex" "12")
+  (load (expand-file-name "~/quicklisp/slime-helper.el")))
  (t
   (let ((h (string-to-number (format-time-string "%H"))))
     (if (or (<= h 7) (>= h 20) (getenv "EMACS_DARK_MODE"))
