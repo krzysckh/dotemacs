@@ -80,6 +80,11 @@
       (interactive)
       (shrink-window-horizontally 5)))
 
+  (evil-define-key 'insert 'global (kbd "C-l")
+    (lambda ()
+      (interactive)
+      (insert-char ?λ)))
+
   (evil-collection-define-key '(normal visual) 'elfeed-search-mode-map
     "r" 'elfeed-search-untag-all-unread)
 
@@ -245,7 +250,10 @@
    (imp-set-user-filter #'markdown-html)
    (call-process-shell-command "sh -c 'xdg-open http://localhost:8080/imp'")))
 
-
+(defalias 'perl-mode 'cperl-mode)
+(defalias 'php-mode 'web-mode)
+(defalias 'html-mode 'web-mode)
+(setq inferior-lisp-program "sbcl")
 (setq confirm-kill-emacs 'y-or-n-p)
 (setq make-backup-files nil)
 (setq-default indent-tabs-mode nil)
