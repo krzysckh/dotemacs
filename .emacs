@@ -304,6 +304,10 @@
     (read-only-mode)
     (text-scale-adjust -1)))
 
+(defun dos2unix ()
+  (interactive)
+  (set-buffer-file-coding-system 'unix 't))
+
 (defun zzz ()
   (interactive)
   (require 'zone)
