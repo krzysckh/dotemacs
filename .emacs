@@ -109,9 +109,9 @@
     (mkdir additional-lisp-path))
 
   (add-to-list 'load-path additional-lisp-path)
-  (rc/require-lisp "https://raw.githubusercontent.com/rougier/emacs-splash/master/splash-screen.el")
   (rc/require-lisp "https://pub.krzysckh.org/wttrin.el")
   (rc/require-lisp "https://pub.krzysckh.org/kto.el")
+  (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/emacs-splash/master/splash-screen.el")
   (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/rcon.el/master/rcon.el")
   (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/yt-search.el/master/yt-search.el"))
 
@@ -236,12 +236,13 @@
            company-capf company-files))))
 
 (require 'ansi-color)
-(add-hook
- 'compilation-filter-hook
- (lambda ()
-   (toggle-read-only)
-   (ansi-color-apply-on-region compilation-filter-start (point))
-   (toggle-read-only)))
+(when (string= system-name "chad")
+  (add-hook
+   'compilation-filter-hook
+   (lambda ()
+     (toggle-read-only)
+     (ansi-color-apply-on-region compilation-filter-start (point))
+     (toggle-read-only))))
 
 (require 'impatient-mode)
 (defun markdown-html (buffer)
@@ -280,6 +281,12 @@
 
 ;(add-hook 'c-mode-hook #'display-fill-column-indicator-mode)
 
+(require 'fortune)
+
+(setq fortune-program "9")
+(setq fortune-program-options "fortune")
+(setq fortune-file (expand-file-name "~/nmojeprogramy/plan9front/lib/theo"))
+
 ;; line numbers
 (defun run-line-mode ()
   (display-line-numbers-mode)
@@ -308,7 +315,7 @@
   (interactive)
   (set-buffer-file-coding-system 'unix 't))
 
-(defun zzz ()
+(defun zzz ()                           ;
   (interactive)
   (require 'zone)
   ;; difference between emacs 29.1 on my laptop, and whatever i have on my debian
@@ -392,4 +399,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
