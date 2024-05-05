@@ -89,6 +89,9 @@
   (evil-collection-define-key '(normal visual) 'elfeed-search-mode-map
     "r" 'elfeed-search-untag-all-unread)
 
+  (global-set-key (kbd "C-c m") #'magit)
+  (global-set-key (kbd "M-x") #'smex)
+  (global-set-key (kbd "C-c M-x") #'universal-argument)
   (global-set-key (kbd "C-k") #'comment-dwim)
   (global-set-key (kbd "C-x C-d") #'ido-dired)
   (global-set-key (kbd "C-x C-i") #'ielm)
@@ -147,6 +150,9 @@
 
 (require 'wttrin)
 (require 'package)
+(require 'ido-completing-read+)
+(require 'smex)
+
 (setq package-install-upgrade-built-in t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
@@ -246,22 +252,6 @@
      (ansi-color-apply-on-region compilation-filter-start (point))
      (toggle-read-only))))
 
-(require 'impatient-mode)
-(defun markdown-html (buffer)
-  (princ
-   (with-current-buffer buffer
-     (format "<!DOCTYPE html><html><title></title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://ndossougbe.github.io/strapdown/dist/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
-   (current-buffer)))
-
-(imp-set-user-filter #'markdown-html)
-(add-hook
- 'markdown-mode-hook
- (lambda ()
-   (httpd-start)
-   (impatient-mode t)
-   (imp-set-user-filter #'markdown-html)
-   (call-process-shell-command "sh -c 'xdg-open http://localhost:8080/imp'")))
-
 (defalias 'perl-mode 'cperl-mode)
 (defalias 'php-mode 'web-mode)
 (defalias 'html-mode 'web-mode)
@@ -274,7 +264,12 @@
 (editorconfig-mode 1)
 (ws-butler-global-mode)
 (setq ido-everywhere t)
+(setq compilation-scroll-output t)
+(setq evil-undo-system 'undo-tree)
+(setq initial-buffer-choice t)
+
 (ido-mode 1)
+(ido-ubiquitous-mode)
 (global-company-mode)
 
 (require 'rcon)
@@ -284,7 +279,6 @@
 ;(add-hook 'c-mode-hook #'display-fill-column-indicator-mode)
 
 (require 'fortune)
-
 (setq fortune-program "9")
 (setq fortune-program-options "fortune")
 (setq fortune-file (expand-file-name "~/nmojeprogramy/plan9front/lib/theo"))
@@ -317,7 +311,7 @@
   (interactive)
   (set-buffer-file-coding-system 'unix 't))
 
-(defun zzz ()                           ;
+(defun zzz ()
   (interactive)
   (require 'zone)
   ;; difference between emacs 29.1 on my laptop, and whatever i have on my debian
@@ -401,4 +395,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode impatient-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
