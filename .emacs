@@ -374,6 +374,15 @@
   (funcall #'eshell/alias (car l) (cadr l)))
    (mapcar #'kill-buffer (mapcar #'buffer-name (buffer-list)))))
 
+(defun abbrevize (l)
+  (apply #'vector (mapcar (lambda (s) (substring s 0 3)) l)))
+
+(setq calendar-month-name-array ["Styczeń" "Luty" "Marzec" "Kwiecień" "Maj" "Czerwiec" "Lipiec" "Sierpień" "Wrzesień" "Październik" "Listopad" "Grudzień"])
+(setq calendar-month-abbrev-array (abbrevize calendar-month-name-array))
+
+(setq calendar-day-name-array ["Poniedziałek" "Wtorek" "Środa" "Czwartek" "Piątek" "Sobota" "Niedziela"])
+(setq calendar-day-abbrev-array (abbrevize calendar-day-name-array))
+
 (require 'splash-screen)
 
 (custom-set-faces
