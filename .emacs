@@ -1,3 +1,5 @@
+;; .emacs -*- lexical-binding: t -*-
+
 (defun rc/load-theme (theme)
   (load-theme theme t)
   (scroll-bar-mode 0)
@@ -344,7 +346,33 @@
 (defun kill-all-buffers ()
   (interactive)
   (when (y-or-n-p "kill-all-buffers?")
-    (mapcar #'kill-buffer (mapcar #'buffer-name (buffer-list)))))
+ (require 'f)
+(require 'eshell)
+(require 'em-alias)
+
+(require 'f)
+(require 'eshell)
+(require 'em-alias)
+
+(defun eshell-write-aliases-list ()
+  0)
+
+(setq shrc (if (string= system-name "chad")
+               (expand-file-name "~/.bashrc")
+             (expand-file-name "~/.kshrc")))
+
+;; load aliases to eshell from `shrc' file
+(dolist (l (cl-remove-if-not
+            (lambda (v) v)
+            (mapcar
+             (lambda (s) (if (string-match "alias \\(?1:.*?\\)=\\(?3:[\"']?\\)\\(?2:.*\\)\\3" s)
+                        (list
+                         (match-string 1 s)
+                         (concat (match-string 2 s) " $*"))
+                      nil))
+             (split-string (f-read-text (expand-file-name "~/.kshrc")) "\n"))))
+  (funcall #'eshell/alias (car l) (cadr l)))
+   (mapcar #'kill-buffer (mapcar #'buffer-name (buffer-list)))))
 
 (require 'splash-screen)
 
@@ -395,4 +423,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
