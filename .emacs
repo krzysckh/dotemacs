@@ -380,7 +380,7 @@
 (setq calendar-month-name-array ["Styczeń" "Luty" "Marzec" "Kwiecień" "Maj" "Czerwiec" "Lipiec" "Sierpień" "Wrzesień" "Październik" "Listopad" "Grudzień"])
 (setq calendar-month-abbrev-array (abbrevize calendar-month-name-array))
 
-(setq calendar-day-name-array ["Poniedziałek" "Wtorek" "Środa" "Czwartek" "Piątek" "Sobota" "Niedziela"])
+(setq calendar-day-name-array ["Niedziela" "Poniedziałek" "Wtorek" "Środa" "Czwartek" "Piątek" "Sobota"])
 (setq calendar-day-abbrev-array (abbrevize calendar-day-name-array))
 
 (require 'splash-screen)
