@@ -269,6 +269,7 @@
 (setq compilation-scroll-output t)
 (setq evil-undo-system 'undo-tree)
 (setq initial-buffer-choice t)
+(setq scheme-program-name "olr") ;; olr = ol -r
 
 (ido-mode 1)
 (ido-ubiquitous-mode)
