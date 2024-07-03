@@ -348,9 +348,7 @@
 (defun kill-all-buffers ()
   (interactive)
   (when (y-or-n-p "kill-all-buffers?")
- (require 'f)
-(require 'eshell)
-(require 'em-alias)
+   (mapcar #'kill-buffer (mapcar #'buffer-name (buffer-list)))))
 
 (require 'f)
 (require 'eshell)
@@ -374,7 +372,6 @@
                       nil))
              (split-string (f-read-text (expand-file-name "~/.kshrc")) "\n"))))
   (funcall #'eshell/alias (car l) (cadr l)))
-   (mapcar #'kill-buffer (mapcar #'buffer-name (buffer-list)))))
 
 (defun abbrevize (l)
   (apply #'vector (mapcar (lambda (s) (substring s 0 3)) l)))
