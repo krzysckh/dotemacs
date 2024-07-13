@@ -132,8 +132,10 @@
  (t
   (let ((h (string-to-number (format-time-string "%H"))))
     (if (or (<= h 7) (>= h 20) (getenv "EMACS_DARK_MODE"))
-        (rc/load-theme 'gruber-darker)
+        (rc/load-theme 'everforest-hard-dark)
+        ;;(rc/load-theme 'gruber-darker)
       (rc/load-theme 'acme)))
+  (set-mouse-color "white")
   (rc/set-font "Lilex" "9")))
 (rc/load-evil)
 (rc/define-ligatures)
@@ -273,7 +275,7 @@
 
 (ido-mode 1)
 (ido-ubiquitous-mode)
-(flx-ido-mode t)
+;; (flx-ido-mode nil)
 (global-company-mode)
 
 (require 'rcon)
@@ -397,7 +399,7 @@
  ;; If there is more than one, they won't work right.
  '(compilation-scroll-output t)
  '(custom-safe-themes
-   '("835d934a930142d408a50b27ed371ba3a9c5a30286297743b0d488e94b225c5f" default))
+   '("e27c9668d7eddf75373fa6b07475ae2d6892185f07ebed037eedf783318761d7" "a53c7ff4570e23d7c5833cd342c461684aa55ddba09b7788d6ae70e7645c12b4" "67f6b0de6f60890db4c799b50c0670545c4234f179f03e757db5d95e99bac332" "835d934a930142d408a50b27ed371ba3a9c5a30286297743b0d488e94b225c5f" default))
  '(evil-undo-system 'undo-tree)
  '(initial-buffer-choice t)
  '(org-format-latex-options
@@ -431,4 +433,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
