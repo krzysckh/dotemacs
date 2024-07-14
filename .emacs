@@ -167,6 +167,10 @@
 (add-hook 'c++-mode-hook 'eglot-ensure)
 (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :codeLensProvider :documentOnTypeFormattingProvider :inlayHintProvider))
 
+(require 'flymake)
+(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+
 (require 'lice)
 (add-to-list 'lice:license-directories "~/.lice")
 (setq lice:default-license "bsd-3-clause-clear")
