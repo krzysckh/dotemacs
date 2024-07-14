@@ -376,7 +376,7 @@
                          (match-string 1 s)
                          (concat (match-string 2 s) " $*"))
                       nil))
-             (split-string (f-read-text (expand-file-name "~/.kshrc")) "\n"))))
+             (split-string (f-read-text shrc) "\n"))))
   (funcall #'eshell/alias (car l) (cadr l)))
 
 (defun abbrevize (l)
