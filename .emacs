@@ -1,5 +1,7 @@
 ;; .emacs -*- lexical-binding: t -*-
 
+(defvar rc/emoji-font "Noto Color Emoji")
+
 (defun rc/load-theme (theme)
   (load-theme theme t)
   (scroll-bar-mode 0)
@@ -9,7 +11,19 @@
   (menu-bar-mode 0))
 
 (defun rc/set-font (fnt size)
-  (add-to-list 'default-frame-alist `(font . ,(concat fnt "-" size))))
+  "set the main font to FNT with size SIZE. SIZE and FNT are both strings."
+  (let ((f (concat fnt ":pixelsize=" size)))
+    (set-frame-font f)
+    (set-face-font 'default f)
+
+    (set-fontset-font
+     t 'symbol
+     (font-spec
+      :family rc/emoji-font
+      :size (string-to-number size)
+      :weight 'normal
+      :width 'normal
+      :slant 'normal))))
 
 (defun rc/load-evil ()
   (setq evil-want-minibuffer t)
@@ -127,7 +141,7 @@
 (cond
  ((string= system-name "chad")
   (rc/load-theme 'everforest-hard-dark)
-  (rc/set-font "Lilex" "12")
+  (rc/set-font "Lilex" "19")
   (load (expand-file-name "~/quicklisp/slime-helper.el")))
  (t
   (let ((h (string-to-number (format-time-string "%H"))))
@@ -136,7 +150,7 @@
         ;;(rc/load-theme 'gruber-darker)
       (rc/load-theme 'acme)))
   (set-mouse-color "white")
-  (rc/set-font "Lilex" "9")))
+  (rc/set-font "Lilex" "15")))
 (rc/load-evil)
 (rc/define-ligatures)
 (rc/define-keybindings)
@@ -437,4 +451,4 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
+   '(yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful nodejs-repl lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil)))
