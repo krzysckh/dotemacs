@@ -139,9 +139,9 @@
 (setq additional-lisp-path "~/.emacs.d/lisp/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
 (cond
- ((string= system-name "chad")
+ ((string= system-name "ligol")
   (rc/load-theme 'everforest-hard-dark)
-  (rc/set-font "Lilex" "19")
+  (rc/set-font "Lilex" "17")
   (load (expand-file-name "~/quicklisp/slime-helper.el")))
  (t
   (let ((h (string-to-number (format-time-string "%H"))))
@@ -266,7 +266,7 @@
            company-capf company-files))))
 
 (require 'ansi-color)
-(when (string= system-name "chad")
+(when (string= system-name "ligol")
   (add-hook
    'compilation-filter-hook
    (lambda ()
@@ -377,7 +377,7 @@
 (defun eshell-write-aliases-list ()
   0)
 
-(setq shrc (if (string= system-name "chad")
+(setq shrc (if (string= system-name "ligol")
                (expand-file-name "~/.bashrc")
              (expand-file-name "~/.kshrc")))
 
