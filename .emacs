@@ -81,6 +81,7 @@
   (evil-define-key '(normal visual) 'global (kbd "|") #'shell-command-on-region)
 
   (evil-define-key 'normal 'global (kbd ";") #'compile)
+
   (global-set-key
    (kbd "C-x C-b")
    (lambda ()
@@ -105,6 +106,11 @@
   (evil-collection-define-key '(normal visual) 'elfeed-search-mode-map
     "r" 'elfeed-search-untag-all-unread)
 
+  (global-set-key (kbd "C-c o") #'crux-open-with)
+  (global-set-key (kbd "C-c u") #'crux-view-url)
+  (global-set-key (kbd "C-c t") #'crux-visit-term-buffer)
+  (global-set-key (kbd "C-c I") #'crux-find-user-init-file)
+  (global-set-key (kbd "C-c S") #'crux-find-shell-init-file)
   (global-set-key (kbd "C-c m") #'magit)
   (global-set-key (kbd "M-x") #'smex)
   (global-set-key (kbd "C-c M-x") #'universal-argument)
@@ -166,6 +172,7 @@
   (interactive)
   (switch-to-buffer "*scratch*"))
 
+(require 'crux)
 (require 'wttrin)
 (require 'package)
 (require 'ido-completing-read+)
@@ -462,6 +469,6 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
+   '(crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
