@@ -103,6 +103,9 @@
       (interactive)
       (insert-char ?λ)))
 
+  ;; ffs
+  (evil-define-key '(insert) python-mode-map [(tab)] #'company-jedi)
+
   (evil-collection-define-key '(normal visual) 'elfeed-search-mode-map
     "r" 'elfeed-search-untag-all-unread)
 
@@ -273,8 +276,10 @@
            company-capf company-files))))
 
 (require 'company)
+(require 'company-jedi)
+(require 'jedi-core)
 (add-to-list 'company-backends 'company-jedi)
-(add-hook 'python-mode-hook 'jedi:setup)
+(add-hook 'python-mode-hook #'jedi:setup)
 
 (require 'ansi-color)
 (when (string= system-name "ligol")
@@ -469,6 +474,6 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
+   '(ssh-config-mode crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
