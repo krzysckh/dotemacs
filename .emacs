@@ -155,10 +155,12 @@
  (t
   (let ((h (string-to-number (format-time-string "%H"))))
     (if (or (<= h 7) (>= h 20) (getenv "EMACS_DARK_MODE"))
-        (rc/load-theme 'everforest-hard-dark)
-        ;;(rc/load-theme 'gruber-darker)
-      (rc/load-theme 'acme)))
-  (set-mouse-color "white")
+        (progn
+         (rc/load-theme 'everforest-hard-dark)
+         (set-mouse-color "#d3c6aa"))
+      (progn
+       (rc/load-theme 'acme)
+       (set-mouse-color "#2b3339"))))
   (rc/set-font "Lilex" "15")))
 (rc/load-evil)
 (rc/define-ligatures)
