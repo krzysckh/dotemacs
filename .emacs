@@ -139,6 +139,7 @@
     (mkdir additional-lisp-path))
 
   (add-to-list 'load-path additional-lisp-path)
+  (rc/require-lisp "https://raw.githubusercontent.com/Naheel-Azawy/holyc-mode.el/00291cebce101456b5ae6e2d45f5139abe463a42/holyc-mode.el")
   (rc/require-lisp "https://pub.krzysckh.org/wttrin.el")
   (rc/require-lisp "https://pub.krzysckh.org/kto.el")
   (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/emacs-splash/master/splash-screen.el")
@@ -177,6 +178,7 @@
   (interactive)
   (switch-to-buffer "*scratch*"))
 
+(require 'holyc-mode)
 (require 'crux)
 (require 'wttrin)
 (require 'package)
@@ -188,9 +190,14 @@
 ;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
 (require 'eglot)
+;; disable eglto in holyc-mode
+(defun eglot-maybe-ensure ()
+  (unless (derived-mode-p 'holyc-mode)
+    (eglot-ensure)))
+
 (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-16" "--fallback-style=none"))
-(add-hook 'c-mode-hook 'eglot-ensure)
-(add-hook 'c++-mode-hook 'eglot-ensure)
+(add-hook 'c-mode-hook #'eglot-maybe-ensure)
+(add-hook 'c++-mode-hook #'eglot-maybe-ensure)
 (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :codeLensProvider :documentOnTypeFormattingProvider :inlayHintProvider))
 
 (require 'flymake)
@@ -407,16 +414,17 @@
              (expand-file-name "~/.kshrc")))
 
 ;; load aliases to eshell from `shrc' file
-(dolist (l (cl-remove-if-not
-            (lambda (v) v)
-            (mapcar
-             (lambda (s) (if (string-match "alias \\(?1:.*?\\)=\\(?3:[\"']?\\)\\(?2:.*\\)\\3" s)
-                        (list
-                         (match-string 1 s)
-                         (concat (match-string 2 s) " $*"))
-                      nil))
-             (split-string (f-read-text shrc) "\n"))))
-  (funcall #'eshell/alias (car l) (cadr l)))
+(when (file-exists-p shrc)
+  (dolist (l (cl-remove-if-not
+              (lambda (v) v)
+              (mapcar
+               (lambda (s) (if (string-match "alias \\(?1:.*?\\)=\\(?3:[\"']?\\)\\(?2:.*\\)\\3" s)
+                          (list
+                           (match-string 1 s)
+                           (concat (match-string 2 s) " $*"))
+                        nil))
+               (split-string (f-read-text shrc) "\n"))))
+    (funcall #'eshell/alias (car l) (cadr l))))
 
 (defun abbrevize (l)
   (apply #'vector (mapcar (lambda (s) (substring s 0 3)) l)))
