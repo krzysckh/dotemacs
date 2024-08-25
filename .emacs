@@ -121,6 +121,7 @@
   (global-set-key (kbd "C-x C-d") #'ido-dired)
   (global-set-key (kbd "C-x C-i") #'ielm)
   (global-set-key (kbd "C-x i")   #'ielm)
+  (global-set-key (kbd "C-x l") #'list-buffers)
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
   (global-set-key (kbd "C-h k") #'helpful-key)
