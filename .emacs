@@ -70,8 +70,7 @@
   (evil-define-key '(normal visual) 'global (kbd "]]")
     (lambda ()
       (interactive)
-      (0x0-dwim (0x0--choose-server))
-      (call-process-shell-command "sh -c 'xdg-open `xclip -sel c -o`' &" nil 0)))
+      (browse-url (0x0-dwim (0x0--choose-server)))))
 
   ;; switch buffers at backspace in normal mode
   (define-key evil-normal-state-map (kbd "<backspace>")
@@ -115,6 +114,7 @@
   (global-set-key (kbd "C-c I") #'crux-find-user-init-file)
   (global-set-key (kbd "C-c S") #'crux-find-shell-init-file)
   (global-set-key (kbd "C-c m") #'magit)
+  (global-set-key (kbd "C-c e") #'eshell)
   (global-set-key (kbd "M-x") #'smex)
   (global-set-key (kbd "C-c M-x") #'universal-argument)
   (global-set-key (kbd "C-k") #'comment-dwim)
