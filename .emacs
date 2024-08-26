@@ -376,6 +376,89 @@
     (run-line-mode))
   (zone))
 
+;; this is a hack of a hack
+(defun hack-local-variables-confirm (all-vars unsafe-vars risky-vars dir-name)
+  "fixup hack-local-variables-confirm to allow marking variables as safe for the rest of the sesion
+without saving to an init file"
+  (unless noninteractive
+    (let ((name (cond (dir-name)
+		      (buffer-file-name
+		       (file-name-nondirectory buffer-file-name))
+		      ((concat "buffer " (buffer-name)))))
+	  (offer-save (and (eq enable-local-variables t)
+			   unsafe-vars))
+	  (buf (get-buffer-create "*Local Variables*")))
+      (with-current-buffer buf
+	(erase-buffer)
+	(cond
+	 (unsafe-vars
+	  (insert "The local variables list in " name
+		  "\nor .dir-locals.el contains values that may not be safe (*)"
+		  (if risky-vars
+		      ", and variables that are risky (**)."
+		    ".")))
+	 (risky-vars
+	  (insert "The local variables list in " name
+		  "\ncontains variables that are risky (**)."))
+	 (t
+	  (insert "A local variables list is specified in " name ".")))
+	(insert "\n\nDo you want to apply it?  You can type
+y  -- to apply the local variables list.
+n  -- to ignore the local variables list.")
+	(if offer-save
+	    (insert "
+!  -- to apply the local variables list, and permanently mark these
+      values (*) as safe (in the future, they will be set automatically.)
+s  -- to apply the local variables list, and mark these values (*) as safe
+      for the rest of this session
+i  -- to ignore the local variables list, and permanently mark these
+      values (*) as ignored\n\n")
+	  (insert "\n\n"))
+	(dolist (elt all-vars)
+	  (cond ((member elt unsafe-vars)
+		 (insert "  * "))
+		((member elt risky-vars)
+		 (insert " ** "))
+		(t
+		 (insert "    ")))
+	  (princ (car elt) buf)
+	  (insert " : ")
+	  ;; Make strings with embedded whitespace easier to read.
+	  (let ((print-escape-newlines t))
+	    (prin1 (cdr elt) buf))
+	  (insert "\n"))
+        (setq-local cursor-type nil)
+	(set-buffer-modified-p nil)
+	(goto-char (point-min)))
+
+      ;; Display the buffer and read a choice.
+      (save-window-excursion
+	(pop-to-buffer buf '(display-buffer--maybe-at-bottom))
+	(let* ((exit-chars '(?y ?n ?\s))
+	       (prompt (format "Please type %s%s: "
+			       (if offer-save "y, n, !, s or i" "y or n")
+			       (if (< (line-number-at-pos (point-max))
+				      (window-body-height))
+				   ""
+				 ", or C-v/M-v to scroll")))
+	       char)
+	  (when offer-save
+            (push ?s exit-chars)
+            (push ?i exit-chars)
+            (push ?! exit-chars))
+	  (setq char (read-char-choice prompt exit-chars))
+          (cond
+           ((and offer-save (= char ?s))
+            (setq safe-local-variable-values (append safe-local-variable-values unsafe-vars)))
+           ((and offer-save (or (= char ?!) (= char ?i)) unsafe-vars)
+            (customize-push-and-save
+             (if (= char ?!)
+                 'safe-local-variable-values
+               'ignored-local-variable-values)
+             unsafe-vars)))
+          (prog1 (memq char '(?! ?\s ?y))
+            (quit-window t)))))))
+
 (defun search-in-evil-collection (mode)
   "searches evil-collection for `mode' and - if found - opens up a new buffer with the file that defines keybindings for it"
   (interactive
