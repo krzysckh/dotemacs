@@ -103,6 +103,23 @@
       (interactive)
       (insert-char ?λ)))
 
+  (evil-define-key 'normal elfeed-show-mode-map (kbd "C-c p")
+    (lambda ()
+      (interactive)
+      (if-let ((id (inv/id-at-point)))
+          (inv/popup-thumbnail id))))
+
+  (evil-define-key 'normal elfeed-show-mode-map (kbd "C-c d")
+    (lambda ()
+      (interactive)
+      (if-let ((id (inv/id-at-point)))
+          (request (concat "https://sponsor.ajay.app/api/branding?videoID=" id)
+            :parser #'inv//json-read-l
+            :complete (cl-function (lambda (&key data &allow-other-keys)
+                                     (message "No alternative title.")
+                                     (if-let ((titles (cdr (assoc 'titles data))))
+                                         (message "%s" (cdr (assq 'title (car titles)))))))))))
+
   ;; ffs
   (evil-define-key '(insert) python-mode-map [(tab)] #'company-jedi)
 
@@ -128,13 +145,6 @@
   (global-set-key (kbd "C-h v") #'helpful-variable)
   (global-set-key (kbd "C-h k") #'helpful-key)
   (global-set-key (kbd "C-h x") #'helpful-command)
-  (global-set-key (kbd "C-c p") (lambda ()
-                                  (interactive)
-                                  (let ((url (thing-at-point 'url)))
-                                    (when url
-                                      (message url)
-                                      (when (string-match "watch\\?v=\\(.*\\)" url)
-                                        (inv/popup-thumbnail (match-string 1 url)))))))
   )
 
 (defun rc/download-file (url path)
