@@ -67,6 +67,7 @@
     lig)))
 
 (defun rc/define-keybindings ()
+  (require 'inv)
   (evil-define-key '(normal visual) 'global (kbd "]]")
     (lambda ()
       (interactive)
@@ -121,11 +122,20 @@
   (global-set-key (kbd "C-x C-d") #'ido-dired)
   (global-set-key (kbd "C-x C-i") #'ielm)
   (global-set-key (kbd "C-x i")   #'ielm)
+  (global-set-key (kbd "C-c i")   #'ielm)
   (global-set-key (kbd "C-x l") #'list-buffers)
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
   (global-set-key (kbd "C-h k") #'helpful-key)
-  (global-set-key (kbd "C-h x") #'helpful-command))
+  (global-set-key (kbd "C-h x") #'helpful-command)
+  (global-set-key (kbd "C-c p") (lambda ()
+                                  (interactive)
+                                  (let ((url (thing-at-point 'url)))
+                                    (when url
+                                      (message url)
+                                      (when (string-match "watch\\?v=\\(.*\\)" url)
+                                        (inv/popup-thumbnail (match-string 1 url)))))))
+  )
 
 (defun rc/download-file (url path)
   (when (not (file-exists-p path))
@@ -145,7 +155,10 @@
   (rc/require-lisp "https://pub.krzysckh.org/kto.el")
   (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/emacs-splash/master/splash-screen.el")
   (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/rcon.el/master/rcon.el")
-  (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/yt-search.el/master/yt-search.el"))
+  (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/yt-search.el/master/yt-search.el")
+  (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/inv.el/master/inv.el")
+  )
+
 
 (setq additional-lisp-path "~/.emacs.d/lisp/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
@@ -164,11 +177,11 @@
        (rc/load-theme 'acme)
        (set-mouse-color "#2b3339"))))
   (rc/set-font "Lilex" "15")))
+(rc/download-lispfiles)
 (rc/load-evil)
 (rc/define-ligatures)
 (rc/define-keybindings)
 
-(rc/download-lispfiles)
 
 (when (not (file-exists-p "~/.lice"))
   (make-directory "~/.lice"))
