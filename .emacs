@@ -161,12 +161,7 @@
 
   (add-to-list 'load-path additional-lisp-path)
   (rc/require-lisp "https://raw.githubusercontent.com/Naheel-Azawy/holyc-mode.el/00291cebce101456b5ae6e2d45f5139abe463a42/holyc-mode.el")
-  (rc/require-lisp "https://pub.krzysckh.org/wttrin.el")
-  (rc/require-lisp "https://pub.krzysckh.org/kto.el")
   (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/emacs-splash/master/splash-screen.el")
-  (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/rcon.el/master/rcon.el")
-  (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/yt-search.el/master/yt-search.el")
-  (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/inv.el/master/inv.el")
   )
 
 
@@ -187,11 +182,21 @@
        (rc/load-theme 'acme)
        (set-mouse-color "#2b3339"))))
   (rc/set-font "Lilex" "15")))
+
+(add-to-list 'load-path "~/.emacs.d/kelp/")
+(require 'kelp)
+(setq kelp/auth-key (f-read "~/txt/kelp-auth"))
+(setq kelp/load-path "~/.emacs.d/kelp/")
+
+(kelp/prepare)
+(kelp/refresh)
+(mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el yt-search.el kelp.el))
+(kelp/update)
+
 (rc/download-lispfiles)
 (rc/load-evil)
 (rc/define-ligatures)
 (rc/define-keybindings)
-
 
 (when (not (file-exists-p "~/.lice"))
   (make-directory "~/.lice"))
