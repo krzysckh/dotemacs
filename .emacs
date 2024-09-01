@@ -103,6 +103,12 @@
       (interactive)
       (insert-char ?λ)))
 
+  (evil-define-key 'normal 'global (kbd "C-c y")
+    (lambda ()
+      (interactive)
+      (if-let ((id (inv/id-at-point)))
+          (yt-handler (concat "https://youtube.com/watch?v=" id)))))
+
   (evil-define-key 'normal elfeed-show-mode-map (kbd "C-c p")
     (lambda ()
       (interactive)
