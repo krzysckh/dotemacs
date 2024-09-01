@@ -191,7 +191,8 @@
 
 (add-to-list 'load-path "~/.emacs.d/kelp/")
 (require 'kelp)
-(setq kelp/auth-key (f-read "~/txt/kelp-auth"))
+(when (file-exists-p "~/txt/kelp-auth")
+  (setq kelp/auth-key (f-read "~/txt/kelp-auth")))
 (setq kelp/load-path "~/.emacs.d/kelp/")
 
 (kelp/refresh)
