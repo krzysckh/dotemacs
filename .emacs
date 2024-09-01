@@ -363,7 +363,7 @@
 
 (require 'rcon)
 (require 'yt-search)
-(when (require 'kto nil 1)
+(when (not (require 'kto nil 1))
   (message "unable to load `kto'"))
 
 ;(add-hook 'c-mode-hook #'display-fill-column-indicator-mode)
