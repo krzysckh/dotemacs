@@ -170,6 +170,10 @@
   (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/emacs-splash/master/splash-screen.el")
   )
 
+(defun rc/networkp (&optional host)
+  (if (eq system-type 'windows-nt)
+      t
+    (= 0 (call-process "ping" nil nil nil "-c" "1" (if host host "kelp.krzysckh.org")))))
 
 (setq additional-lisp-path "~/.emacs.d/lisp/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
@@ -195,9 +199,10 @@
   (setq kelp/auth-key (f-read "~/txt/kelp-auth")))
 (setq kelp/load-path "~/.emacs.d/kelp/")
 
-(kelp/refresh)
-(mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el yt-search.el kelp.el session-file-vars-hack.el))
-(kelp/update)
+(when (rc/networkp)
+  (kelp/refresh)
+  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el yt-search.el kelp.el session-file-vars-hack.el))
+  (kelp/update))
 
 (rc/download-lispfiles)
 (rc/load-evil)
