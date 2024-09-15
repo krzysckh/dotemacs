@@ -11,7 +11,7 @@
   (menu-bar-mode 0))
 
 (defun rc/set-font (fnt size)
-  "set the main font to FNT with size SIZE. SIZE and FNT are both strings."
+  "set the main font to `fnt' with size `size'. `size' and `fnt' are both strings."
   (let ((f (concat fnt ":pixelsize=" size)))
     (set-frame-font f)
     (set-face-font 'default f)
