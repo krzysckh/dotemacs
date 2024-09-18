@@ -201,7 +201,7 @@
 
 (when (rc/networkp)
   (kelp/refresh)
-  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el yt-search.el kelp.el session-file-vars-hack.el))
+  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el yt-search.el kelp.el session-file-vars-hack.el pterodactyl.el))
   (kelp/update))
 
 (rc/download-lispfiles)
