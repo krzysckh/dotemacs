@@ -252,9 +252,14 @@
 
 (require 'elfeed)
 
-(setq browse-url-handlers (list (cons ".*youtube.com.*" #'yt-handler)))
+(setq browse-url-handlers (list (cons #'inv/videop #'(lambda (url &rest _) (yt-handler (concat "https://youtube.com/watch?v=" (inv/videop url)))))))
+
 (defun yt-handler (url &rest args)
-  (call-process-shell-command (concat "sh -c \"mpv '" url "'\"") nil 0))
+  (let ((buf (get-buffer-create "*yt-handler*")))
+    (with-current-buffer buf
+      (erase-buffer)
+      (message "%s" (switch-to-buffer buf))
+      (async-shell-command (concat "mpv '" url "'") buf buf))))
 
 (defun elfeed-update-yt (auth)
   (interactive
