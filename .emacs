@@ -143,6 +143,7 @@
   (global-set-key (kbd "C-c M-x") #'universal-argument)
   (global-set-key (kbd "C-k") #'comment-dwim)
   (global-set-key (kbd "C-x C-d") #'ido-dired)
+  (global-set-key (kbd "C-c C-d") #'ido-dired)
   (global-set-key (kbd "C-x C-i") #'ielm)
   (global-set-key (kbd "C-x i")   #'ielm)
   (global-set-key (kbd "C-c i")   #'ielm)
@@ -151,6 +152,8 @@
   (global-set-key (kbd "C-h v") #'helpful-variable)
   (global-set-key (kbd "C-h k") #'helpful-key)
   (global-set-key (kbd "C-h x") #'helpful-command)
+  (global-set-key (kbd "C-c s s") #'inv/search)
+  (global-set-key (kbd "C-c s c") #'inv/search-channel)
   )
 
 (defun rc/download-file (url path)
