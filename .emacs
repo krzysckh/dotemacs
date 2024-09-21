@@ -176,7 +176,7 @@
 (defun rc/networkp (&optional host)
   (if (eq system-type 'windows-nt)
       t
-    (= 0 (call-process "ping" nil nil nil "-c" "1" (if host host "kelp.krzysckh.org")))))
+    (null (request-response-error-thrown (request (or host "https://kelp.krzysckh.org") :timeout 2 :sync t)))))
 
 (setq additional-lisp-path "~/.emacs.d/lisp/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
