@@ -360,15 +360,20 @@
 (setq confirm-kill-emacs 'y-or-n-p)
 (setq make-backup-files nil)
 (setq-default indent-tabs-mode nil)
+(setq undo-tree-mode-lighter " ut")
 (global-undo-tree-mode)
 (global-ligature-mode t)
+(setq editorconfig-mode-lighter " ec")
 (editorconfig-mode 1)
 (ws-butler-global-mode)
+(setq which-key-lighter " wk")
+(which-key-mode t)
 (setq ido-everywhere t)
 (setq compilation-scroll-output t)
 (setq evil-undo-system 'undo-tree)
 (setq initial-buffer-choice t)
 (setq scheme-program-name "olr") ;; olr = ol -r
+(setq eldoc-minor-mode-string " eld")
 
 (ido-mode 1)
 (ido-ubiquitous-mode)
@@ -537,6 +542,6 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(haskell-mode cask-mode ssh-config-mode crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
+   '(which-key haskell-mode cask-mode ssh-config-mode crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
