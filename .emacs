@@ -154,6 +154,7 @@
   (global-set-key (kbd "C-h x") #'helpful-command)
   (global-set-key (kbd "C-c s s") #'inv/search)
   (global-set-key (kbd "C-c s c") #'inv/search-channel)
+  (global-set-key (kbd "C-c s e") #'elfeed)
   )
 
 (defun rc/download-file (url path)
