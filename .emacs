@@ -139,6 +139,7 @@
   (global-set-key (kbd "C-c S") #'crux-find-shell-init-file)
   (global-set-key (kbd "C-c m") #'magit)
   (global-set-key (kbd "C-c e") #'eshell)
+  (global-set-key (kbd "C-c E") #'rc/eshell-menu)
   (global-set-key (kbd "M-x") #'smex)
   (global-set-key (kbd "C-c M-x") #'universal-argument)
   (global-set-key (kbd "C-k") #'comment-dwim)
@@ -178,6 +179,43 @@
   (if (eq system-type 'windows-nt)
       t
     (null (request-response-error-thrown (request (or host "https://kelp.krzysckh.org") :timeout 2 :sync t)))))
+
+(defun rc/eshellp (s)
+  (ignore-errors
+    (string= (substring s 0 7) "*eshell")))
+
+;; hack warning: will not work if n of eshells > 9
+(defun rc/eshell-menu ()
+  (interactive)
+  (let ((eshells (cl-sort (--filter (not (null it)) (-filter #'rc/eshellp (-map #'buffer-name (buffer-list)))) #'string-lessp))
+        (buf (get-buffer-create "*rc/eshell-menu*")))
+    (with-current-buffer buf
+      (pop-to-buffer buf '(display-buffer--maybe-at-bottom))
+      (let* ((exit-chars '(?q ?n))
+             (prompt (format "Choose an eshell buffer or create a new one:\n[n]: create\n%s"
+                             (apply #'(lambda (&rest l) (string-join l nil))
+                                    (--map (prog1 (format
+                                                   "[%d]: %s %s\n"
+                                                   (mod (+ 1 it) 10)
+                                                   (nth it eshells)
+                                                   (with-current-buffer (nth it eshells) (pwd)))
+                                             (push (string-to-char (number-to-string (+ 1 it))) exit-chars))
+                                           (number-sequence 0 (- (length eshells) 1)))))))
+        (erase-buffer)
+        (insert prompt)
+        (fit-window-to-buffer)
+        (goto-char (point-min))
+        (setq char (read-char-choice "?: " exit-chars))
+        (cond
+         ((= char ?q)
+          (quit-window t))
+         ((= char ?n)
+          (quit-window t)
+          (eshell t))
+         ((memq char exit-chars)
+          (quit-window t)
+          (switch-to-buffer (nth (- (string-to-number (char-to-string char)) 1) eshells))))
+        (kill-buffer buf)))))
 
 (setq additional-lisp-path "~/.emacs.d/lisp/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
@@ -262,7 +300,7 @@
   (let ((buf (get-buffer-create "*yt-handler*")))
     (with-current-buffer buf
       (erase-buffer)
-      (message "%s" (switch-to-buffer buf))
+      (switch-to-buffer buf)
       (async-shell-command (concat "mpv '" url "'") buf buf))))
 
 (defun elfeed-update-yt (auth)
