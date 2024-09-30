@@ -2,6 +2,12 @@
 
 (defvar rc/emoji-font "Noto Color Emoji")
 
+(defmacro ilambda (args &rest body)
+  (declare (indent defun))
+  `(lambda (,@args)
+     (interactive)
+     ,@body))
+
 (defun rc/load-theme (theme)
   (load-theme theme t)
   (scroll-bar-mode 0)
@@ -69,55 +75,46 @@
 (defun rc/define-keybindings ()
   (require 'inv)
   (evil-define-key '(normal visual) 'global (kbd "]]")
-    (lambda ()
-      (interactive)
+    (ilambda ()
       (browse-url (0x0-dwim (0x0--choose-server)))))
 
   ;; switch buffers at backspace in normal mode
   (define-key evil-normal-state-map (kbd "<backspace>")
-    (lambda ()
-      (interactive)
+    (ilambda ()
       (switch-to-buffer (other-buffer))))
-  (evil-define-key '(normal visual) 'global (kbd "|") #'shell-command-on-region)
 
+  (evil-define-key '(normal visual) 'global (kbd "|") #'shell-command-on-region)
   (evil-define-key 'normal 'global (kbd ";") #'compile)
 
   (global-set-key
    (kbd "C-x C-b")
-   (lambda ()
-     (interactive)
+   (ilambda ()
      (execute-extended-command "" "switch-to-buffer")))
 
   (evil-define-key 'normal 'global (kbd "+")
-    (lambda ()
-      (interactive)
+    (ilambda ()
       (enlarge-window-horizontally 5)))
 
   (evil-define-key 'normal 'global (kbd "-")
-    (lambda ()
-      (interactive)
+    (ilambda ()
       (shrink-window-horizontally 5)))
 
   (evil-define-key 'insert 'global (kbd "C-l")
-    (lambda ()
-      (interactive)
+    (ilambda ()
       (insert-char ?λ)))
 
   (evil-define-key 'normal 'global (kbd "C-c y")
-    (lambda ()
-      (interactive)
+    (ilambda ()
       (if-let ((id (inv/id-at-point)))
           (yt-handler (concat "https://youtube.com/watch?v=" id)))))
 
   (evil-define-key 'normal elfeed-show-mode-map (kbd "C-c p")
-    (lambda ()
-      (interactive)
+    (ilambda ()
       (if-let ((id (inv/id-at-point)))
           (inv/popup-thumbnail id))))
 
   (evil-define-key 'normal elfeed-show-mode-map (kbd "C-c d")
-    (lambda ()
-      (interactive)
+    (ilambda ()
       (if-let ((id (inv/id-at-point)))
           (request (concat "https://sponsor.ajay.app/api/branding?videoID=" id)
             :parser #'inv//json-read-l
@@ -243,7 +240,7 @@
 
 (when (rc/networkp)
   (kelp/refresh)
-  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el yt-search.el kelp.el session-file-vars-hack.el pterodactyl.el))
+  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el))
   (kelp/update))
 
 (rc/download-lispfiles)
@@ -439,8 +436,7 @@
 ;; highlight todos
 (add-hook
  'prog-mode-hook
- (lambda ()
-   (interactive)
+ (ilambda ()
    (highlight-regexp "TODO:" 'diff-error)))
 
 ;; TODO: do innego pliku idk.. ~/.emacs.d/lisp/util.el idk idk idk
