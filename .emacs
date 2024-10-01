@@ -416,7 +416,6 @@
 (global-company-mode)
 
 (require 'rcon)
-(require 'yt-search)
 (when (not (require 'kto nil 1))
   (message "unable to load `kto'"))
 
