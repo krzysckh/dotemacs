@@ -153,6 +153,7 @@
   (global-set-key (kbd "C-c s s") #'inv/search)
   (global-set-key (kbd "C-c s c") #'inv/search-channel)
   (global-set-key (kbd "C-c s e") #'elfeed)
+  (global-set-key (kbd "C-c s w") #'eww-preview-current-buffer)
   )
 
 (defun rc/download-file (url path)
@@ -492,6 +493,12 @@
 (defun olr ()
   (interactive)
   (comint-run "olr"))
+
+(defun eww-preview-current-buffer ()
+  (interactive)
+  (let ((buf (get-buffer-create (concat (buffer-name) " - HTML preview"))))
+    (eww-display-html 'utf8 (buffer-name) nil nil buf)
+    (switch-to-buffer buf)))
 
 (require 'f)
 (require 'eshell)
