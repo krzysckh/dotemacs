@@ -319,6 +319,7 @@
         "https://100r.co/links/rss.xml"
         "https://text.causal.agency/feed.atom"
         "https://www.spoj.com/FRAKTAL/rss/"
+        "https://gitlab.com/owl-lisp/owl/-/merge_requests.atom"
         ))
 
 ;; https://github.com/krzysckh/bin/blob/master/subjson2elfeed.pl
