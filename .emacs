@@ -320,12 +320,18 @@
         "https://text.causal.agency/feed.atom"
         "https://www.spoj.com/FRAKTAL/rss/"
         "https://gitlab.com/owl-lisp/owl/-/merge_requests.atom"
+        "https://gitlab.com/owl-lisp/owl/-/commits/master?format=atom"
         ))
 
 ;; https://github.com/krzysckh/bin/blob/master/subjson2elfeed.pl
 (when (file-exists-p "~/.elfeed-yt")
   (load "~/.elfeed-yt")
   (setq elfeed-feeds (append elfeed-feeds elfeed-youtube-rss-feeds)))
+
+(defun elfeed-mark-all-read ()
+  (interactive)
+  (mark-whole-buffer)
+  (elfeed-search-untag-all-unread))
 
 (require 'lsp)
 (add-hook 'java-mode-hook #'lsp)
