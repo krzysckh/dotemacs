@@ -134,6 +134,7 @@
   (global-set-key (kbd "C-c t") #'crux-visit-term-buffer)
   (global-set-key (kbd "C-c I") #'crux-find-user-init-file)
   (global-set-key (kbd "C-c S") #'crux-find-shell-init-file)
+  (global-set-key (kbd "C-c b") #'rc/open-scratch-buffer)
   (global-set-key (kbd "C-c m") #'magit)
   (global-set-key (kbd "C-c e") #'eshell)
   (global-set-key (kbd "C-c E") #'rc/eshell-menu)
@@ -161,6 +162,15 @@
     (require 'url)
     (url-copy-file url path)))
 
+(defun rc/open-scratch-buffer ()
+  (interactive)
+  (if-let ((buf (get-buffer "*scratch*")))
+      (switch-to-buffer buf)
+    (let ((buf (get-buffer-create "*scratch*")))
+      (with-current-buffer buf
+        (emacs-lisp-mode)
+        (switch-to-buffer buf)))))
+
 (defun rc/require-lisp (url)
   (rc/download-file url (concat additional-lisp-path (car (last (split-string url "/"))))))
 
@@ -181,6 +191,7 @@
 (defun rc/eshellp (s)
   (ignore-errors
     (string= (substring s 0 7) "*eshell")))
+
 
 ;; hack warning: will not work if n of eshells > 9
 (defun rc/eshell-menu ()
@@ -292,14 +303,22 @@
 
 (require 'elfeed)
 
-(setq browse-url-handlers (list (cons #'inv/videop #'(lambda (url &rest _) (yt-handler (concat "https://youtube.com/watch?v=" (inv/videop url)))))))
+;; don't show yt-handler buffer, keep it to debug stuff
+(add-to-list 'display-buffer-alist `("^\\*yt-handler\\*$" . (,#'(lambda (&rest _) _) . nil)))
 
 (defun yt-handler (url &rest args)
   (let ((buf (get-buffer-create "*yt-handler*")))
     (with-current-buffer buf
       (erase-buffer)
-      (switch-to-buffer buf)
       (async-shell-command (concat "mpv '" url "'") buf buf))))
+
+(defun yt (url &rest _)
+  (interactive)
+  (when-let ((id (inv/videop url)))
+    (yt-handler (concat "https://youtube.com/watch?v=" id))))
+
+(setq browse-url-handlers `((,#'inv/videop . ,#'yt)))
+;; (setq browse-url-handlers (list (cons #'inv/videop #'(lambda (url &rest _) (yt-handler (concat "https://youtube.com/watch?v=" (inv/videop url)))))))
 
 (defun elfeed-update-yt (auth)
   (interactive
@@ -539,6 +558,36 @@
 
 (setq calendar-day-name-array ["Niedziela" "Poniedziałek" "Wtorek" "Środa" "Czwartek" "Piątek" "Sobota"])
 (setq calendar-day-abbrev-array (abbrevize calendar-day-name-array))
+
+;; local socket-based eval server
+
+(defvar rc/evaluator-proc-name "*evaluator*")
+(defvar rc/evaluator-buffer-name "*evaluator buffer*")
+(defvar rc/evaluator-socket "~/.emacs-evaluator")
+(defvar rc/evaluator-proc nil)
+
+(defun rc/start-evaluator ()
+  (when (or (f-exists-p rc/evaluator-socket) rc/evaluator-proc)
+    (rc/stop-evaluator))
+
+  (setq rc/evaluator-proc
+        (make-network-process
+         :name rc/evaluator-proc-name
+         :buffer rc/evaluator-buffer-name
+         :family 'local
+         :local (expand-file-name rc/evaluator-socket)
+         :filter (lambda (_ str)
+                   (message "evaluator: %s" str)
+                   (eval (read str) t))
+         :server t)))
+
+(defun rc/stop-evaluator ()
+  (ignore-errors (delete-process rc/evaluator-proc))
+  (ignore-errors (delete-file (expand-file-name rc/evaluator-socket)))
+  (setq rc/evaluator-proc nil))
+
+(rc/start-evaluator)
+(add-hook 'kill-emacs-hook #'rc/stop-evaluator)
 
 (require 'splash-screen)
 
