@@ -310,6 +310,7 @@
   (let ((buf (get-buffer-create "*yt-handler*")))
     (with-current-buffer buf
       (erase-buffer)
+      (message "yt-handler: %s" url)
       (async-shell-command (concat "mpv '" url "'") buf buf))))
 
 (defun yt (url &rest _)
@@ -340,6 +341,9 @@
         "https://www.spoj.com/FRAKTAL/rss/"
         "https://gitlab.com/owl-lisp/owl/-/merge_requests.atom"
         "https://gitlab.com/owl-lisp/owl/-/commits/master?format=atom"
+        "https://www.krakow.pl/feeds/rss/komunikaty/26"
+        "https://www.krakow.pl/feeds/rss/komunikaty/29"
+        "https://www.krakow.pl/feeds/rss/komunikaty/2332"
         ))
 
 ;; https://github.com/krzysckh/bin/blob/master/subjson2elfeed.pl
