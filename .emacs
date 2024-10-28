@@ -299,7 +299,7 @@
 (require 'lice)
 (add-to-list 'lice:license-directories "~/.lice")
 (setq lice:default-license "bsd-3-clause-clear")
-(setq lice:copyright-holder "Krzysztof Michałczyk <kpm@linux.pl>")
+(setq lice:copyright-holder "Krzysztof Michałczyk <kpm@krzysckh.org>")
 
 (require 'elfeed)
 
