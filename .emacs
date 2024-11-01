@@ -192,7 +192,6 @@
   (ignore-errors
     (string= (substring s 0 7) "*eshell")))
 
-
 ;; hack warning: will not work if n of eshells > 9
 (defun rc/eshell-menu ()
   (interactive)
@@ -253,7 +252,7 @@
 (when (rc/networkp)
   (kelp/refresh)
   (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el))
-  (kelp/update))
+  (ignore-errors (kelp/update)))
 
 (rc/download-lispfiles)
 (rc/load-evil)
