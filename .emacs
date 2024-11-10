@@ -592,6 +592,18 @@
 (rc/start-evaluator)
 (add-hook 'kill-emacs-hook #'rc/stop-evaluator)
 
+;; inv conf
+(setq inv/display-additional-data
+      #'(lambda (r)
+          (let ((id (cdr (assoc 'videoId r))))
+            (message "id: %s" id)
+            (insert-button
+             "ytmp4"
+             'face 'button
+             'action #'(lambda (_)
+                         (async-shell-command (concat "cd /tmp && ytmp4 https://youtube.com/watch?v=" id)))))))
+
+
 (require 'splash-screen)
 
 (custom-set-faces
