@@ -180,6 +180,7 @@
 
   (add-to-list 'load-path additional-lisp-path)
   (rc/require-lisp "https://raw.githubusercontent.com/Naheel-Azawy/holyc-mode.el/00291cebce101456b5ae6e2d45f5139abe463a42/holyc-mode.el")
+  (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/micropython-mode/master/micropython-mode.el")
   (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/emacs-splash/master/splash-screen.el")
   )
 
@@ -270,6 +271,7 @@
 
 (require 'session-file-vars-hack)
 (require 'holyc-mode)
+(require 'micropython-mode)
 (require 'crux)
 (require 'wttrin)
 (require 'package)
@@ -343,6 +345,7 @@
         "https://www.krakow.pl/feeds/rss/komunikaty/26"
         "https://www.krakow.pl/feeds/rss/komunikaty/29"
         "https://www.krakow.pl/feeds/rss/komunikaty/2332"
+        "https://grimgrains.com/links/rss.xml"
         ))
 
 ;; https://github.com/krzysckh/bin/blob/master/subjson2elfeed.pl
