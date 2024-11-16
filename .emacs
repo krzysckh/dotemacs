@@ -252,7 +252,7 @@
 
 (when (rc/networkp)
   (kelp/refresh)
-  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el))
+  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el clonk.el))
   (ignore-errors (kelp/update)))
 
 (rc/download-lispfiles)
@@ -346,6 +346,7 @@
         "https://www.krakow.pl/feeds/rss/komunikaty/29"
         "https://www.krakow.pl/feeds/rss/komunikaty/2332"
         "https://grimgrains.com/links/rss.xml"
+        "https://lovekrakow.pl/rss/aktualnosci.html"
         ))
 
 ;; https://github.com/krzysckh/bin/blob/master/subjson2elfeed.pl
@@ -656,6 +657,6 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(bind-key erc faceup flymake idlwave org project soap-client tramp use-package verilog-mode xref which-key haskell-mode cask-mode ssh-config-mode crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
+   '(lua-mode bind-key erc faceup flymake idlwave org project soap-client tramp use-package verilog-mode xref which-key haskell-mode cask-mode ssh-config-mode crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
