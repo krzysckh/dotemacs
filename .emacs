@@ -74,6 +74,7 @@
 
 (defun rc/define-keybindings ()
   (require 'inv)
+  (require 'rp2040-helpers)
   (evil-define-key '(normal visual) 'global (kbd "]]")
     (ilambda ()
       (browse-url (0x0-dwim (0x0--choose-server)))))
@@ -125,6 +126,8 @@
 
   ;; ffs
   (evil-define-key '(insert) python-mode-map [(tab)] #'company-jedi)
+
+  (evil-define-key 'normal micropython-mode-map (kbd "C-c C-S-p") #'copy-buffer-to-rp2040)
 
   (evil-collection-define-key '(normal visual) 'elfeed-search-mode-map
     "r" 'elfeed-search-untag-all-unread)
@@ -252,7 +255,7 @@
 
 (when (rc/networkp)
   (kelp/refresh)
-  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el clonk.el))
+  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el clonk.el rp2040-helpers))
   (ignore-errors (kelp/update)))
 
 (rc/download-lispfiles)
@@ -347,6 +350,8 @@
         "https://www.krakow.pl/feeds/rss/komunikaty/2332"
         "https://grimgrains.com/links/rss.xml"
         "https://lovekrakow.pl/rss/aktualnosci.html"
+        "https://solar.lowtechmagazine.com/pl/posts/index.xml"
+        "https://solar.lowtechmagazine.com/posts/index.xml"
         ))
 
 ;; https://github.com/krzysckh/bin/blob/master/subjson2elfeed.pl
