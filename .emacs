@@ -255,7 +255,7 @@
 
 (when (rc/networkp)
   (kelp/refresh)
-  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el clonk.el rp2040-helpers))
+  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el clonk.el rp2040-helpers.el))
   (ignore-errors (kelp/update)))
 
 (rc/download-lispfiles)
