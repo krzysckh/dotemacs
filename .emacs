@@ -292,6 +292,7 @@
     (eglot-ensure)))
 
 (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-16" "--fallback-style=none"))
+(add-to-list 'eglot-server-programs '((perl-mode cperl-mode) "perlnavigator" "--stdio"))
 (add-hook 'c-mode-hook #'eglot-maybe-ensure)
 (add-hook 'c++-mode-hook #'eglot-maybe-ensure)
 (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :codeLensProvider :documentOnTypeFormattingProvider :inlayHintProvider))
@@ -428,6 +429,8 @@
 (setq markdown-fontify-code-blocks-natively t)
 
 (defalias 'perl-mode 'cperl-mode)
+(setq cperl-indent-parens-as-block t)
+(setq cperl-indent-level 2)
 (defalias 'php-mode 'web-mode)
 (defalias 'html-mode 'web-mode)
 (setq inferior-lisp-program "sbcl")
