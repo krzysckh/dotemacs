@@ -413,7 +413,12 @@
 (require 'company)
 (require 'company-jedi)
 (require 'jedi-core)
+(require 'merlin-company)
+(add-hook 'tuareg-mode-hook #'merlin-mode)
+(add-hook 'caml-mode-hook #'merlin-mode)
+
 (add-to-list 'company-backends 'company-jedi)
+(add-to-list 'company-backends 'merlin-company-backend)
 (add-hook 'python-mode-hook #'jedi:setup)
 
 (require 'ansi-color)
@@ -665,6 +670,6 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(tco smarty-mode lua-mode bind-key erc faceup flymake idlwave org project soap-client tramp use-package verilog-mode xref which-key haskell-mode cask-mode ssh-config-mode crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
+   '(merlin-company tco smarty-mode lua-mode bind-key erc faceup flymake idlwave org project soap-client tramp use-package verilog-mode xref which-key haskell-mode cask-mode ssh-config-mode crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
