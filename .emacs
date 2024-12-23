@@ -257,7 +257,7 @@
 
 (when (rc/networkp)
   (kelp/refresh)
-  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el clonk.el rp2040-helpers.el))
+  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el clonk.el rp2040-helpers.el owl.el))
   (ignore-errors (kelp/update)))
 
 (rc/download-lispfiles)
@@ -434,6 +434,9 @@
 
 (require 'markdown-mode)
 (setq markdown-fontify-code-blocks-natively t)
+
+(require 'owl)
+(add-to-list 'auto-mode-alist '("\\.scm\\'" . owl-mode))
 
 (defalias 'perl-mode 'cperl-mode)
 (setq cperl-indent-parens-as-block t)
