@@ -152,6 +152,7 @@
   (global-set-key (kbd "C-x i")   #'ielm)
   (global-set-key (kbd "C-c i")   #'ielm)
   (global-set-key (kbd "C-x l") #'list-buffers)
+  (global-set-key (kbd "C-c l") #'rc/switch-to-slime-repl-buffer)
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
   (global-set-key (kbd "C-h k") #'helpful-key)
@@ -161,6 +162,10 @@
   (global-set-key (kbd "C-c s e") #'elfeed)
   (global-set-key (kbd "C-c s w") #'eww-preview-current-buffer)
   )
+
+(defun rc/switch-to-slime-repl-buffer ()
+  (interactive)
+  (switch-to-buffer (slime-repl-buffer)))
 
 (defun rc/download-file (url path)
   (when (not (file-exists-p path))
