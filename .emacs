@@ -262,7 +262,7 @@
 
 (when (rc/networkp)
   (kelp/refresh)
-  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el clonk.el rp2040-helpers.el owl.el))
+  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el clonk.el rp2040-helpers.el owl.el subs.el))
   (ignore-errors (kelp/update)))
 
 (rc/download-lispfiles)
@@ -362,13 +362,15 @@
         "https://solar.lowtechmagazine.com/posts/index.xml"
         "https://goingapp.pl/more/feed/"
         "https://ftrv.se/_/gallery/gallery.rss"
-        ("https://www.youtube.com/feeds/videos.xml?channel_id=UCDDobgQYZHvlYqwnuGE1B7w" yt)
         ))
 
+(when (require 'subs nil 1)
+  (setf elfeed-feeds (-uniq (append elfeed-feeds (--map (list it 'yt) *yt-subs-rss*)))))
+
 ;; https://github.com/krzysckh/bin/blob/master/subjson2elfeed.pl
-(when (file-exists-p "~/.elfeed-yt")
-  (load "~/.elfeed-yt")
-  (setq elfeed-feeds (append elfeed-feeds elfeed-youtube-rss-feeds)))
+;; (when (file-exists-p "~/.elfeed-yt")
+;;   (load "~/.elfeed-yt")
+;;   (setq elfeed-feeds (append elfeed-feeds elfeed-youtube-rss-feeds)))
 
 (defun elfeed-mark-all-read ()
   (interactive)
