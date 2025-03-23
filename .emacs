@@ -362,6 +362,7 @@
         "https://solar.lowtechmagazine.com/posts/index.xml"
         "https://goingapp.pl/more/feed/"
         "https://ftrv.se/_/gallery/gallery.rss"
+        "https://www.diament.agh.edu.pl/feed/"
         ))
 
 (when (require 'subs nil 1)
@@ -527,6 +528,12 @@
     (run-line-mode))
   (zone))
 
+;; whatever
+;; e.g. for https://haybcoffee.pl/produkt/sie-przelewa-kwiat/
+;; (price-per-cup 49 250 18) ; => 3.528 [pln]
+(defun price-per-cup (price per grams-in-cup)
+  (let ((n-cups (/ (float per) (float grams-in-cup))))
+    (/ (float price) n-cups)))
 
 (defun search-in-evil-collection (mode)
   "searches evil-collection for `mode' and - if found - opens up a new buffer with the file that defines keybindings for it"
