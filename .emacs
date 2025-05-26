@@ -363,6 +363,7 @@
         "https://goingapp.pl/more/feed/"
         "https://ftrv.se/_/gallery/gallery.rss"
         "https://www.diament.agh.edu.pl/feed/"
+        "https://krytykapolityczna.pl/feed/"
         ))
 
 (when (require 'subs nil 1)
