@@ -50,16 +50,12 @@
 (defun rc/define-ligatures ()
   (require 'ligature)
   (global-prettify-symbols-mode t)
-  ;; gen ligatures for up to 80 dash || equals symbols
-  (setq long-ligatures '(?- ?= ?_ ?*))
-  (setq lig (apply #'append (mapcar (lambda (x) (mapcar (lambda (ch) (make-string x ch)) long-ligatures)) (number-sequence 2 80))))
-
   (ligature-set-ligatures 't '("www"))
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
   (ligature-set-ligatures
    'prog-mode
    (append
-    '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+    '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "||=" "||>"
       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
       "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
@@ -71,8 +67,10 @@
       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-      "\\\\" "://" ";;;")
-    lig)))
+      "\\\\" "://" ";;;"
+      ("-" (rx (+ "-")))
+      ))))
+
 
 (defun rc/define-keybindings ()
   (require 'inv)
