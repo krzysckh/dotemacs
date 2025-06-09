@@ -365,6 +365,8 @@
         "https://www.diament.agh.edu.pl/feed/"
         "https://krytykapolityczna.pl/feed/"
         "https://krzysckh.org/posts.rss"
+        "https://undrtn.pl/feed/"
+        "https://halasyimelodie.com/feed/"
         ))
 
 (when (require 'subs nil 1)
