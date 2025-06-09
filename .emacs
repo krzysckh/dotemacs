@@ -354,6 +354,8 @@
         "https://www.krakow.pl/feeds/rss/komunikaty/26"
         "https://www.krakow.pl/feeds/rss/komunikaty/29"
         "https://www.krakow.pl/feeds/rss/komunikaty/2332"
+        "https://krakow.pl/feeds/rss/komunikaty/33"
+        "https://krakow.pl/feeds/rss/komunikaty/186"
         "https://grimgrains.com/links/rss.xml"
         "https://lovekrakow.pl/rss/aktualnosci.html"
         "https://solar.lowtechmagazine.com/pl/posts/index.xml"
@@ -362,6 +364,7 @@
         "https://ftrv.se/_/gallery/gallery.rss"
         "https://www.diament.agh.edu.pl/feed/"
         "https://krytykapolityczna.pl/feed/"
+        "https://krzysckh.org/posts.rss"
         ))
 
 (when (require 'subs nil 1)
