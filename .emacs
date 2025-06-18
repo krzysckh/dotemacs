@@ -260,7 +260,22 @@
 
 (when (rc/networkp)
   (kelp/refresh)
-  (mapcar #'kelp/install '(wttrin.el kto.el inv.el rcon.el kelp.el session-file-vars-hack.el pterodactyl.el clonk.el rp2040-helpers.el owl.el subs.el 0x0-dirtyfix.el))
+  (mapcar
+   #'kelp/install
+   '(wttrin.el
+     kto.el
+     inv.el
+     rcon.el
+     kelp.el
+     session-file-vars-hack.el
+     pterodactyl.el
+     clonk.el
+     rp2040-helpers.el
+     owl.el
+     subs.el
+     feeds.el
+     0x0-dirtyfix.el
+     ))
   (ignore-errors (kelp/update)))
 
 (rc/download-lispfiles)
@@ -338,39 +353,18 @@
    (concat "sh -c 'curl -H \"Authorization: " auth "\" https://pipedapi.kavin.rocks/subscriptions > /tmp/sub.json"
            " && subjson2elfeed.pl /tmp/sub.json")))
 
-(setq elfeed-feeds
-      '("http://9front.org/releases/index.rss"
-        "http://harmful.cat-v.org/Blog/index.rss"
-        "http://rafalkosik.com/feed/"
-        "https://xkcd.com/rss.xml"
-        "https://ftrv.se/posts.atom"
-        "https://nullprogram.com/feed/"
-        "https://9lab.org/blog/index.xml"
-        "https://100r.co/links/rss.xml"
-        "https://text.causal.agency/feed.atom"
-        "https://www.spoj.com/FRAKTAL/rss/"
-        "https://gitlab.com/owl-lisp/owl/-/merge_requests.atom"
-        "https://gitlab.com/owl-lisp/owl/-/commits/master?format=atom"
-        "https://www.krakow.pl/feeds/rss/komunikaty/26"
-        "https://www.krakow.pl/feeds/rss/komunikaty/29"
-        "https://www.krakow.pl/feeds/rss/komunikaty/2332"
-        "https://krakow.pl/feeds/rss/komunikaty/33"
-        "https://krakow.pl/feeds/rss/komunikaty/186"
-        "https://grimgrains.com/links/rss.xml"
-        "https://lovekrakow.pl/rss/aktualnosci.html"
-        "https://solar.lowtechmagazine.com/pl/posts/index.xml"
-        "https://solar.lowtechmagazine.com/posts/index.xml"
-        "https://goingapp.pl/more/feed/"
-        "https://ftrv.se/_/gallery/gallery.rss"
-        "https://www.diament.agh.edu.pl/feed/"
-        "https://krytykapolityczna.pl/feed/"
-        "https://krzysckh.org/posts.rss"
-        "https://undrtn.pl/feed/"
-        "https://halasyimelodie.com/feed/"
-        ))
+;; TODO: check for future name clashes
+(defun elfeed-load-feeds ()
+  (if (require 'feeds nil 1)
+      (setq elfeed-feeds *followed-rss-feeds*)
+    (warn "Couldn't load elfeed feeds (should have been downloaded by kelp)"))
 
-(when (require 'subs nil 1)
-  (setf elfeed-feeds (-uniq (append elfeed-feeds (--map (list it 'yt) *yt-subs-rss*)))))
+  (if (require 'subs nil 1)
+      (setf elfeed-feeds (-uniq (append elfeed-feeds (--map (list it 'yt) *yt-subs-rss*))))
+    (warn "Couldn't load elfeed youtube feeds (should have been downloaded by kelp)"))
+  )
+
+(elfeed-load-feeds)
 
 ;; https://github.com/krzysckh/bin/blob/master/subjson2elfeed.pl
 ;; (when (file-exists-p "~/.elfeed-yt")
@@ -696,6 +690,6 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(csharp-mode purescript-mode gradle-mode pyvenv nasm-mode gnuplot-mode gnuplot merlin-company tco smarty-mode lua-mode bind-key erc faceup flymake idlwave org project soap-client tramp use-package verilog-mode xref which-key haskell-mode cask-mode ssh-config-mode crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
+   '(wakatime-mode csharp-mode purescript-mode gradle-mode pyvenv nasm-mode gnuplot-mode gnuplot merlin-company tco smarty-mode lua-mode bind-key erc faceup flymake idlwave org project soap-client tramp use-package verilog-mode xref which-key haskell-mode cask-mode ssh-config-mode crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
