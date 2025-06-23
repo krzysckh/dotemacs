@@ -159,6 +159,8 @@
   (global-set-key (kbd "C-c s c") #'inv/search-channel)
   (global-set-key (kbd "C-c s e") #'elfeed)
   (global-set-key (kbd "C-c s w") #'eww-preview-current-buffer)
+  (global-set-key (kbd "C-c K") (ilambda ()
+                                  (find-file-other-window "~/.emacs.d/kelp/subs.el" t)))
   )
 
 (defun rc/switch-to-slime-repl-buffer ()
@@ -630,16 +632,7 @@
 (add-hook 'kill-emacs-hook #'rc/stop-evaluator)
 
 ;; inv conf
-(setq inv/display-additional-data
-      #'(lambda (r)
-          (let ((id (cdr (assoc 'videoId r))))
-            (message "id: %s" id)
-            (insert-button
-             "ytmp4"
-             'face 'button
-             'action #'(lambda (_)
-                         (async-shell-command (concat "cd /tmp && ytmp4 https://youtube.com/watch?v=" id)))))))
-
+(setf inv/display-additional-data #'inv/display-additional-data--ytmp4)
 
 (require 'splash-screen)
 
