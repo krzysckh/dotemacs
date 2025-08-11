@@ -618,6 +618,7 @@
          :buffer rc/evaluator-buffer-name
          :family 'local
          :local (expand-file-name rc/evaluator-socket)
+         :service (expand-file-name rc/evaluator-socket)
          :filter (lambda (_ str)
                    (message "evaluator: %s" str)
                    (eval (read str) t))
@@ -649,40 +650,60 @@
  ;; If there is more than one, they won't work right.
  '(compilation-scroll-output t)
  '(custom-safe-themes
-   '("e27c9668d7eddf75373fa6b07475ae2d6892185f07ebed037eedf783318761d7" "a53c7ff4570e23d7c5833cd342c461684aa55ddba09b7788d6ae70e7645c12b4" "67f6b0de6f60890db4c799b50c0670545c4234f179f03e757db5d95e99bac332" "835d934a930142d408a50b27ed371ba3a9c5a30286297743b0d488e94b225c5f" default))
+   '("e27c9668d7eddf75373fa6b07475ae2d6892185f07ebed037eedf783318761d7"
+     "a53c7ff4570e23d7c5833cd342c461684aa55ddba09b7788d6ae70e7645c12b4"
+     "67f6b0de6f60890db4c799b50c0670545c4234f179f03e757db5d95e99bac332"
+     "835d934a930142d408a50b27ed371ba3a9c5a30286297743b0d488e94b225c5f"
+     default))
  '(evil-undo-system 'undo-tree)
  '(initial-buffer-choice t)
  '(org-format-latex-options
-   '(:foreground default :background default :scale 2.0 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
-                 ("begin" "$1" "$" "$$" "\\(" "\\[")))
+   '(:foreground default :background default :scale 2.0 :html-foreground
+                 "Black" :html-background "Transparent" :html-scale
+                 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
  '(org-preview-latex-process-alist
-   '((dvipng :programs
-             ("dvipng" "latex")
-             :description "dvi > png" :message "you need to install the programs: latex and dvipng." :image-input-type "dvi" :image-output-type "png" :image-size-adjust
-             (1.0 . 1.0)
-             :latex-compiler
+   '((dvipng :programs ("dvipng" "latex") :description "dvi > png"
+             :message
+             "you need to install the programs: latex and dvipng."
+             :image-input-type "dvi" :image-output-type "png"
+             :image-size-adjust (1.0 . 1.0) :latex-compiler
              ("latex -interaction nonstopmode -output-directory %o %f")
-             :image-converter
-             ("dvipng -D %D -T tight -o %O %f")
+             :image-converter ("dvipng -D %D -T tight -o %O %f")
              :transparent-image-converter
              ("dvipng -D %D -T tight -bg Transparent -o %O %f"))
-     (dvisvgm :programs
-              ("latex" "dvisvgm")
-              :description "dvi > svg" :message "you need to install the programs: latex and dvisvgm." :image-input-type "dvi" :image-output-type "svg" :image-size-adjust
-              (1.7 . 1.5)
-              :latex-compiler
+     (dvisvgm :programs ("latex" "dvisvgm") :description "dvi > svg"
+              :message
+              "you need to install the programs: latex and dvisvgm."
+              :image-input-type "dvi" :image-output-type "svg"
+              :image-size-adjust (1.7 . 1.5) :latex-compiler
               ("latex -interaction nonstopmode -output-directory %o %f")
               :image-converter
               ("dvisvgm %f --no-fonts --exact-bbox --scale=%S --output=%O"))
-     (imagemagick :programs
-                  ("latex" "convert")
-                  :description "pdf > png" :message "you need to install the programs: latex and imagemagick." :image-input-type "pdf" :image-output-type "png" :image-size-adjust
-                  (1.0 . 1.0)
-                  :latex-compiler
+     (imagemagick :programs ("latex" "convert") :description
+                  "pdf > png" :message
+                  "you need to install the programs: latex and imagemagick."
+                  :image-input-type "pdf" :image-output-type "png"
+                  :image-size-adjust (1.0 . 1.0) :latex-compiler
                   ("pdflatex -interaction nonstopmode -output-directory %o %f")
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(wakatime-mode csharp-mode purescript-mode gradle-mode pyvenv nasm-mode gnuplot-mode gnuplot merlin-company tco smarty-mode lua-mode bind-key erc faceup flymake idlwave org project soap-client tramp use-package verilog-mode xref which-key haskell-mode cask-mode ssh-config-mode crux js-comint company-jedi yaml-mode yaml-tomato basic-mode rainbow-mode flx-ido fennel-mode smex ido-completing-read+ go-mode janet-mode nsis-mode typescript-mode web-mode gruber-darker-theme rc-mode dockerfile-mode try keycast chordpro-mode company-php company-web ctable rustic helpful lsp-java w3m company-quickhelp acme-theme pdf-tools elfeed 0x0 lice indent-guide howdoyou evil-numbers perl-doc ws-butler vterm-toggle vterm eglot lsp-ui lsp-mode rust-mode uxntal-mode magit evil-collection racket-mode all-the-icons undo-tree ligature editorconfig flycheck company evil))
+   '(0x0 acme-theme all-the-icons ansi basic-mode bind-key cask-mode
+         chordpro-mode commander company company-jedi company-php
+         company-quickhelp company-web crux csharp-mode ctable
+         dhall-mode dockerfile-mode editorconfig eglot elfeed epl erc
+         evil evil-collection evil-numbers faceup fennel-mode flx-ido
+         flycheck flymake git gnu-apl-mode gnuplot gnuplot-mode
+         go-mode gradle-mode gruber-darker-theme haskell-mode helpful
+         howdoyou idlwave ido-completing-read+ indent-guide janet-mode
+         js-comint keycast lice ligature lsp-java lsp-mode lsp-ui
+         lua-mode magit merlin-company nasm-mode nsis-mode org
+         pdf-tools perl-doc project purescript-mode python pyvenv
+         racket-mode rainbow-mode rc-mode rust-mode rustic shut-up
+         smarty-mode smex soap-client ssh-config-mode tco tramp try
+         typescript-mode tzc undo-tree use-package uxntal-mode
+         verilog-mode vterm vterm-toggle w3m wakatime-mode web-mode
+         which-key window-tool-bar ws-butler xref yaml-mode
+         yaml-tomato))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
