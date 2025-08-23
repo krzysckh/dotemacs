@@ -44,6 +44,7 @@
   (evil-mode 1)
   (global-set-key (kbd "C-a") 'evil-numbers/inc-at-pt)
   (global-set-key (kbd "C-S-a") 'evil-numbers/dec-at-pt)
+  (global-set-key (kbd "C-x ESC ESC") nil)
 
   (evil-collection-init))
 
