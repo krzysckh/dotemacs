@@ -72,6 +72,9 @@
       ("-" (rx (+ "-")))
       ))))
 
+(defun rc/other ()
+  (interactive)
+  (switch-to-buffer (other-buffer)))
 
 (defun rc/define-keybindings ()
   (require 'inv)
@@ -81,9 +84,7 @@
       (browse-url (0x0-dwim (0x0--choose-server)))))
 
   ;; switch buffers at backspace in normal mode
-  (define-key evil-normal-state-map (kbd "<backspace>")
-    (ilambda ()
-      (switch-to-buffer (other-buffer))))
+  (define-key evil-normal-state-map (kbd "<backspace>") 'rc/other)
 
   (evil-define-key '(normal visual) 'global (kbd "|") #'shell-command-on-region)
   (evil-define-key 'normal 'global (kbd ";") #'compile)
