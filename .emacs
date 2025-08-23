@@ -255,6 +255,7 @@
   (rc/set-font "Lilex" "15")))
 
 (add-to-list 'load-path "~/.emacs.d/kelp/")
+
 (require 'kelp)
 (when (file-exists-p "~/txt/kelp-auth")
   (setq kelp/auth-key (f-read "~/txt/kelp-auth")))
@@ -277,6 +278,7 @@
      subs.el
      feeds.el
      0x0-dirtyfix.el
+     exwm-kpm.el
      ))
   (ignore-errors (kelp/update)))
 
@@ -338,7 +340,7 @@
     (with-current-buffer buf
       (erase-buffer)
       (message "yt-handler: %s" url)
-      (async-shell-command (concat "mpv '" url "'") buf buf))))
+      (async-shell-command (concat "mpv --ytdl-format=best '" url "'") buf buf))))
 
 (defun yt (url &rest _)
   (interactive)
@@ -439,9 +441,10 @@
   (add-hook
    'compilation-filter-hook
    (lambda ()
-     (toggle-read-only)
-     (ansi-color-apply-on-region compilation-filter-start (point))
-     (toggle-read-only))))
+     (let ((was buffer-read-only))
+       (setf buffer-read-only nil)
+       (ansi-color-apply-on-region compilation-filter-start (point))
+       (setf buffer-read-only was)))))
 
 (require 'markdown-mode)
 (setq markdown-fontify-code-blocks-natively t)
@@ -635,6 +638,24 @@
 ;; inv conf
 (setf inv/display-additional-data #'inv/display-additional-data--ytmp4)
 
+;; modeline
+(setf display-time-format "%d %B %Y %H:%M")
+
+(setf display-time-string-forms
+      '((if (and (not display-time-format) display-time-day-and-date)
+            (format-time-string "%a %b %e " now)
+          "")
+        (propertize
+         (format-time-string (or display-time-format
+                                 (if display-time-24hr-format "%H:%M" "%-I:%M%p"))
+                             now)
+         'face 'display-time-date-and-time
+         'help-echo (format-time-string "%a %b %e, %Y" now))
+        " "))
+
+(display-time-mode)
+
+(require 'exwm-kpm)
 (require 'splash-screen)
 
 (custom-set-faces
@@ -692,15 +713,16 @@
          chordpro-mode commander company company-jedi company-php
          company-quickhelp company-web crux csharp-mode ctable
          dhall-mode dockerfile-mode editorconfig eglot elfeed epl erc
-         evil evil-collection evil-numbers faceup fennel-mode flx-ido
-         flycheck flymake git gnu-apl-mode gnuplot gnuplot-mode
-         go-mode gradle-mode gruber-darker-theme haskell-mode helpful
-         howdoyou idlwave ido-completing-read+ indent-guide janet-mode
-         js-comint keycast lice ligature lsp-java lsp-mode lsp-ui
-         lua-mode magit merlin-company nasm-mode nsis-mode org
-         pdf-tools perl-doc project purescript-mode python pyvenv
-         racket-mode rainbow-mode rc-mode rust-mode rustic shut-up
-         smarty-mode smex soap-client ssh-config-mode tco tramp try
+         evil evil-collection evil-numbers exiftool exwm
+         exwm-firefox-evil faceup fennel-mode flx-ido flycheck flymake
+         git gnu-apl-mode gnuplot gnuplot-mode go-mode gradle-mode
+         gruber-darker-theme haskell-mode helpful howdoyou idlwave
+         ido-completing-read+ indent-guide janet-mode js-comint
+         keycast lice ligature lsp-java lsp-mode lsp-ui lua-mode magit
+         merlin-company nasm-mode nsis-mode org pdf-tools perl-doc
+         project purescript-mode python pyvenv racket-mode
+         rainbow-mode rc-mode rust-mode rustic shut-up smarty-mode
+         smex soap-client ssh-config-mode tco tramp try
          typescript-mode tzc undo-tree use-package uxntal-mode
          verilog-mode vterm vterm-toggle w3m wakatime-mode web-mode
          which-key window-tool-bar ws-butler xref yaml-mode
