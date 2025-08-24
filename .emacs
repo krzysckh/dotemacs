@@ -183,6 +183,10 @@
         (emacs-lisp-mode)
         (switch-to-buffer buf)))))
 
+(defun rc/sudo-edit (filename)
+  (let ((method (if (executable-find "doas") "doas" "sudo")))
+    (find-file (format "/%s:root@localhost:%s" method filename))))
+
 (defun rc/require-lisp (url)
   (rc/download-file url (concat additional-lisp-path (car (last (split-string url "/"))))))
 
@@ -605,6 +609,9 @@
 
 (setq calendar-day-name-array ["Niedziela" "Poniedziałek" "Wtorek" "Środa" "Czwartek" "Piątek" "Sobota"])
 (setq calendar-day-abbrev-array (abbrevize calendar-day-name-array))
+
+(setf crux-term-func #'vterm)
+(setf crux-term-buffer-name "vterm")
 
 ;; local socket-based eval server
 
