@@ -452,6 +452,9 @@
        (ansi-color-apply-on-region compilation-filter-start (point))
        (setf buffer-read-only was)))))
 
+(when (string= system-name "jonagold")
+  (display-battery-mode))
+
 (require 'markdown-mode)
 (setq markdown-fontify-code-blocks-natively t)
 
