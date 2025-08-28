@@ -1,6 +1,6 @@
 ;; .emacs -*- lexical-binding: t -*-
 
-(defvar rc/emoji-font "Noto Color Emoji")
+(defvar rc/emoji-font "Twemoji Mozilla")
 
 (defmacro when-system (name &rest body)
   (declare (indent defun))
@@ -56,16 +56,16 @@
   (menu-bar-mode 0))
 
 (defun rc/set-font (fnt size)
-  "set the main font to `fnt' with size `size'. `size' and `fnt' are both strings."
-  (let ((f (concat fnt ":pixelsize=" size)))
+  "set the main font to `fnt' with size `size'."
+  (let ((f (format "%s:pixelsize=%s" fnt size)))
     (set-frame-font f)
     (set-face-font 'default f)
 
     (set-fontset-font
-     t 'symbol
+     t 'emoji
      (font-spec
       :family rc/emoji-font
-      :size (string-to-number size)
+      :pixelsize (string-to-number (format "%s" size))
       :weight 'normal
       :width 'normal
       :slant 'normal))))
@@ -282,7 +282,6 @@
         (kill-buffer buf)))))
 
 (setq additional-lisp-path "~/.emacs.d/lisp/")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
 
 (rc/load-gui)
 
@@ -795,10 +794,10 @@
          lua-mode magit merlin-company nasm-mode notmuch
          notmuch-transient nsis-mode org pdf-tools perl-doc project
          purescript-mode python pyvenv racket-mode rainbow-mode
-         rc-mode rust-mode rustic shut-up smarty-mode smex soap-client
-         ssh-config-mode tco tramp try typescript-mode tzc undo-tree
-         use-package uxntal-mode verilog-mode vterm vterm-toggle w3m
-         wakatime-mode web-mode which-key window-tool-bar ws-butler
-         xref yaml-mode yaml-tomato))
+         rc-mode rust-mode rustic show-font shut-up smarty-mode smex
+         soap-client ssh-config-mode tco tramp try typescript-mode tzc
+         undo-tree use-package uxntal-mode verilog-mode vterm
+         vterm-toggle w3m wakatime-mode web-mode which-key
+         window-tool-bar ws-butler xref yaml-mode yaml-tomato))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
