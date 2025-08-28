@@ -2,14 +2,53 @@
 
 (defvar rc/emoji-font "Noto Color Emoji")
 
+(defmacro when-system (name &rest body)
+  (declare (indent defun))
+  `(when (string= system-name (format "%s" (quote ,name)))
+     (progn ,@body)))
+
 (defmacro ilambda (args &rest body)
   (declare (indent defun))
   `(lambda (,@args)
      (interactive)
      ,@body))
 
+(defun rc/disable-other-themes ()
+  (mapcar #'disable-theme custom-enabled-themes))
+
+(defvar rc/nice-themes
+  '((dark
+     ef-bio
+     ef-cherie
+     ef-dream
+     ef-melissa-dark
+     ef-winter)
+    (light
+     ef-cyprus
+     ef-day
+     ef-elea-light
+     ef-melissa-light)))
+
+(defun rc/pick-random (lst)
+  (let ((n (random (length lst))))
+    (nth n lst)))
+
 (defun rc/load-theme (theme)
-  (load-theme theme t)
+  (rc/disable-other-themes)
+  (load-theme theme :no-confirm)
+  (set-mouse-color (ef-themes-get-color-value 'fg-main)))
+
+(defun rc/load-theme-dwim (&optional maybe-type)
+  (let* ((h (string-to-number (format-time-string "%H")))
+         (type
+          (or maybe-type
+              (if (or (<= h 7) (>= h 20) (getenv "EMACS_DARK_MODE"))
+                  'dark
+                'light))))
+    (rc/load-theme (rc/pick-random (cdr (assoc type rc/nice-themes))))))
+
+(defun rc/load-gui ()
+  (rc/load-theme-dwim)
   (scroll-bar-mode 0)
   (column-number-mode 1)
   (show-paren-mode 1)
@@ -244,21 +283,25 @@
 
 (setq additional-lisp-path "~/.emacs.d/lisp/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
-(cond
- ((string= system-name "ligol")
-  (rc/load-theme 'everforest-hard-dark)
+
+(rc/load-gui)
+
+(when-system ligol
   (rc/set-font "Lilex" "17")
-  (load (expand-file-name "~/quicklisp/slime-helper.el")))
- (t
-  (let ((h (string-to-number (format-time-string "%H"))))
-    (if (or (<= h 7) (>= h 20) (getenv "EMACS_DARK_MODE"))
-        (progn
-         (rc/load-theme 'everforest-hard-dark)
-         (set-mouse-color "#d3c6aa"))
-      (progn
-       (rc/load-theme 'acme)
-       (set-mouse-color "#2b3339"))))
-  (rc/set-font "Lilex" "15")))
+  (load (expand-file-name "~/quicklisp/slime-helper.el"))
+
+  (require 'ansi-color)
+  (add-hook
+   'compilation-filter-hook
+   (lambda ()
+     (let ((was buffer-read-only))
+       (setf buffer-read-only nil)
+       (ansi-color-apply-on-region compilation-filter-start (point))
+       (setf buffer-read-only was)))))
+
+(when-system jonagold
+  (display-battery-mode)
+  (rc/set-font "Lilex" "15"))
 
 (add-to-list 'load-path "~/.emacs.d/kelp/")
 
@@ -346,7 +389,7 @@
     (with-current-buffer buf
       (erase-buffer)
       (message "yt-handler: %s" url)
-      (async-shell-command (concat "mpv --ytdl-format=best '" url "'") buf buf))))
+      (async-shell-command (concat "mpv '" url "'") buf buf))))
 
 (defun yt (url &rest _)
   (interactive)
@@ -441,19 +484,6 @@
 (add-to-list 'company-backends 'company-jedi)
 (add-to-list 'company-backends 'merlin-company-backend)
 (add-hook 'python-mode-hook #'jedi:setup)
-
-(require 'ansi-color)
-(when (string= system-name "ligol")
-  (add-hook
-   'compilation-filter-hook
-   (lambda ()
-     (let ((was buffer-read-only))
-       (setf buffer-read-only nil)
-       (ansi-color-apply-on-region compilation-filter-start (point))
-       (setf buffer-read-only was)))))
-
-(when (string= system-name "jonagold")
-  (display-battery-mode))
 
 (require 'markdown-mode)
 (setq markdown-fontify-code-blocks-natively t)
@@ -587,6 +617,7 @@
 (defun eshell-write-aliases-list ()
   0)
 
+;; TODO: write this in a cuter way
 (setq shrc (if (string= system-name "ligol")
                (expand-file-name "~/.bashrc")
              (expand-file-name "~/.kshrc")))
@@ -646,6 +677,36 @@
 
 (rc/start-evaluator)
 (add-hook 'kill-emacs-hook #'rc/stop-evaluator)
+
+;; erc
+(require 'erc)
+(add-to-list 'erc-modules 'nicks)
+(add-to-list 'erc-modules 'log)
+(add-to-list 'erc-modules 'notifications)
+;; (add-to-list 'erc-modules 'spelling)
+
+(setq erc-log-channels-directory "~/irclogs/")
+(add-hook 'erc-insert-post-hook 'erc-save-buffer-in-logs)
+
+(defun rc/get-irc-password-for (s)
+  (f-read-text (format "~/txt/irc/%s.password" s))) ; very safe
+
+(defun rc/erc-bouncer-connect-to (ip name)
+  (erc-tls
+   :server "krzysckh.org"
+   :port 6697
+   :user (format "%s/%s@%s" (user-login-name) ip system-name)
+   :password (rc/get-irc-password-for name)))
+
+(defun erc-cmd-HH (&optional line)
+  (let ((chan (current-buffer)))
+    (erc-with-server-buffer
+      (erc-server-send (format "CHATHISTORY LATEST %s * 50" chan)))))
+
+(defun rc/start-erc ()
+  (interactive)
+  (rc/erc-bouncer-connect-to "irc.libera.chat"       'libera)
+  (rc/erc-bouncer-connect-to "colonq.computer:26697" 'clonk))
 
 ;; inv conf
 (setf inv/display-additional-data #'inv/display-additional-data--ytmp4)
@@ -724,20 +785,20 @@
    '(0x0 acme-theme all-the-icons ansi basic-mode bind-key cask-mode
          chordpro-mode commander company company-jedi company-php
          company-quickhelp company-web crux csharp-mode ctable
-         dhall-mode dockerfile-mode editorconfig eglot elfeed epl erc
-         evil evil-collection evil-numbers exiftool exwm
-         exwm-firefox-evil faceup fennel-mode flx-ido flycheck flymake
-         git gnu-apl-mode gnuplot gnuplot-mode go-mode gradle-mode
-         gruber-darker-theme haskell-mode helpful howdoyou idlwave
-         ido-completing-read+ indent-guide janet-mode js-comint
-         keycast lice ligature lsp-java lsp-mode lsp-ui lua-mode magit
-         merlin-company nasm-mode nsis-mode org pdf-tools perl-doc
-         project purescript-mode python pyvenv racket-mode
-         rainbow-mode rc-mode rust-mode rustic shut-up smarty-mode
-         smex soap-client ssh-config-mode tco tramp try
-         typescript-mode tzc undo-tree use-package uxntal-mode
-         verilog-mode vterm vterm-toggle w3m wakatime-mode web-mode
-         which-key window-tool-bar ws-butler xref yaml-mode
-         yaml-tomato))
+         dhall-mode dockerfile-mode editorconfig ef-themes eglot
+         elfeed epl erc erc-image evil evil-collection evil-numbers
+         exiftool exwm exwm-firefox-evil faceup fennel-mode flx-ido
+         flycheck flymake git gnu-apl-mode gnuplot gnuplot-mode
+         go-mode gradle-mode gruber-darker-theme haskell-mode helpful
+         idlwave ido-completing-read+ indent-guide janet-mode
+         js-comint keycast lice ligature lsp-java lsp-mode lsp-ui
+         lua-mode magit merlin-company nasm-mode notmuch
+         notmuch-transient nsis-mode org pdf-tools perl-doc project
+         purescript-mode python pyvenv racket-mode rainbow-mode
+         rc-mode rust-mode rustic shut-up smarty-mode smex soap-client
+         ssh-config-mode tco tramp try typescript-mode tzc undo-tree
+         use-package uxntal-mode verilog-mode vterm vterm-toggle w3m
+         wakatime-mode web-mode which-key window-tool-bar ws-butler
+         xref yaml-mode yaml-tomato))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
