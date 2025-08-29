@@ -18,16 +18,37 @@
 
 (defvar rc/nice-themes
   '((dark
-     ef-bio
-     ef-cherie
+     ef-winter
+     ef-tritanopia-dark
+     ef-trio-dark
+     ef-symbiosis
+     ef-rosa
+     ef-owl
+     ef-elea-dark
      ef-dream
-     ef-melissa-dark
-     ef-winter)
+     ef-cherie
+     ef-bio)
     (light
-     ef-cyprus
-     ef-day
+     ef-summer
+     ef-spring
+     ef-reverie
+     ef-melissa-light
+     ef-kassio
+     ef-frost
      ef-elea-light
-     ef-melissa-light)))
+     ef-eagle
+     ef-day
+     ef-cyprus
+     ef-arbutus)))
+
+;; lst might be for example ef-themes-dark-themes
+(defun rc/pick-nice-themes-from-list (lst)
+  (let ((l nil))
+    (dolist (th lst)
+      (rc/load-theme th)
+      (when (string= "y" (read-string "save? "))
+        (push th l)))
+    l))
 
 (defun rc/pick-random (lst)
   (let ((n (random (length lst))))
