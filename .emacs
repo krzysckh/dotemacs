@@ -407,14 +407,14 @@
 
 ;; TODO: check for future name clashes
 (defun elfeed-load-feeds ()
+  (setf elfeed-feeds nil)
   (if (require 'feeds nil 1)
       (setq elfeed-feeds *followed-rss-feeds*)
     (warn "Couldn't load elfeed feeds (should have been downloaded by kelp)"))
 
   (if (require 'subs nil 1)
-      (setf elfeed-feeds (-uniq (append elfeed-feeds (--map (list it 'yt) *yt-subs-rss*))))
-    (warn "Couldn't load elfeed youtube feeds (should have been downloaded by kelp)"))
-  )
+      (setf elfeed-feeds (append elfeed-feeds *yt-subs-rss*))
+    (warn "Couldn't load elfeed youtube feeds (should have been downloaded by kelp)")))
 
 (elfeed-load-feeds)
 
