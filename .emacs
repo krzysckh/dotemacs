@@ -775,17 +775,18 @@
 (defun rc/sndioctl-monitor-parser (str)
   (dolist (it (string-split str "\n"))
     (when (string-match "\\(?1:[^=]+\\)=\\(?2:[^ ]+\\).*$" it)
-      (dolist (h rc/volume-changed-hooks)
-        (funcall h
-                 :device (match-string 1 it)
-                 :volume (read (match-string 2 it)))))))
+      (let ((a (match-string 1 it))
+            (b (match-string 2 it)))
+        (dolist (h rc/volume-changed-hooks)
+          (funcall h :device a :volume (string-to-number b)))))))
+
+(defun rc//run-monitor-parser (a b &rest _)
+  (rc/sndioctl-monitor-parser (buffer-substring-no-properties a b)))
 
 (defun rc/start-sndioctl-monitor ()
   (let ((buf (get-buffer-create " *Volume notification sndioctl process*")))
     (with-current-buffer buf
-      (add-hook 'after-change-functions
-                #'(lambda (a b &rest _) (rc/sndioctl-monitor-parser (buffer-substring-no-properties a b)))
-                nil t)
+      (add-hook 'after-change-functions 'rc//run-monitor-parser nil t)
       (start-process "sndioctl" buf "sndioctl" "-m"))))
 
 (defun rc/default-volume-changed-hook-pl (&key device &key volume)
@@ -796,10 +797,11 @@
      :app-name "sndioctl monitor"
      :app-icon "/usr/share/icons/retrosmart-icon-theme/scalable/sound.svg"
      :urgency  'low
-     :timeout  (* 1 1000))))
+     :timeout  500)))
 
 (when-system jonagold
-  (rc/add-volume-changed-hook 'rc/default-volume-changed-hook-pl))
+  (rc/add-volume-changed-hook 'rc/default-volume-changed-hook-pl)
+  (rc/start-sndioctl-monitor))
 
 (require 'exwm-kpm)
 (require 'splash-screen)
