@@ -59,6 +59,11 @@
   (load-theme theme :no-confirm)
   (set-mouse-color (ef-themes-get-color-value 'fg-main)))
 
+(defun rc/load-random-theme (&optional type)
+  (if type
+      (rc/load-theme (rc/pick-random (cdr (assoc type rc/nice-themes))))
+    (rc/load-theme-dwim)))
+
 (defun rc/load-theme-dwim (&optional maybe-type)
   (let* ((h (string-to-number (format-time-string "%H")))
          (type
@@ -66,7 +71,7 @@
               (if (or (<= h 7) (>= h 20) (getenv "EMACS_DARK_MODE"))
                   'dark
                 'light))))
-    (rc/load-theme (rc/pick-random (cdr (assoc type rc/nice-themes))))))
+    (rc/load-random-theme type)))
 
 (defun rc/load-gui ()
   (rc/load-theme-dwim)
@@ -727,6 +732,16 @@
   (interactive)
   (rc/erc-bouncer-connect-to "irc.libera.chat"       'libera)
   (rc/erc-bouncer-connect-to "colonq.computer:26697" 'clonk))
+
+(defun rc/erc-connect-to-twitch-dot-tv ()
+  (let ((oauth (f-read-text "~/txt/twitch.tv.oauth"))
+        (nick  (f-read-text "~/txt/twitch.tv.nickname")))
+    (erc-tls
+     :id "twitch"
+     :server "irc.chat.twitch.tv"
+     :port 6697
+     :password (format "oauth:%s" oauth)
+     :nick nick)))
 
 ;; inv conf
 (setf inv/display-additional-data #'inv/display-additional-data--ytmp4)
