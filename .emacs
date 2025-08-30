@@ -763,6 +763,44 @@
 
 (display-time-mode)
 
+;; Volume notifications on openbsd/sndiod
+(require 'notifications)
+
+(defvar rc/volume-changed-hooks nil
+  "List of hooks to run after volume has been changed on one of the devices. The correct signature is (λ (&key device &key volume) ...)")
+
+(defun rc/add-volume-changed-hook (hook)
+  (add-to-list 'rc/volume-changed-hooks hook))
+
+(defun rc/sndioctl-monitor-parser (str)
+  (dolist (it (string-split str "\n"))
+    (when (string-match "\\(?1:[^=]+\\)=\\(?2:[^ ]+\\).*$" it)
+      (dolist (h rc/volume-changed-hooks)
+        (funcall h
+                 :device (match-string 1 it)
+                 :volume (read (match-string 2 it)))))))
+
+(defun rc/start-sndioctl-monitor ()
+  (let ((buf (get-buffer-create " *Volume notification sndioctl process*")))
+    (with-current-buffer buf
+      (add-hook 'after-change-functions
+                #'(lambda (a b &rest _) (rc/sndioctl-monitor-parser (buffer-substring-no-properties a b)))
+                nil t)
+      (start-process "sndioctl" buf "sndioctl" "-m"))))
+
+(defun rc/default-volume-changed-hook-pl (&key device &key volume)
+  (when (string= device "output[0].level")
+    (notifications-notify
+     :title    (format "Zmieniono głośność na %0.2f" (* volume 100))
+     :body     (format "urządzenie: %s" device)
+     :app-name "sndioctl monitor"
+     :app-icon "/usr/share/icons/retrosmart-icon-theme/scalable/sound.svg"
+     :urgency  'low
+     :timeout  (* 1 1000))))
+
+(when-system jonagold
+  (rc/add-volume-changed-hook 'rc/default-volume-changed-hook-pl))
+
 (require 'exwm-kpm)
 (require 'splash-screen)
 
