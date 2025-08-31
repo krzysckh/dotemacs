@@ -46,7 +46,7 @@
   (let ((l nil))
     (dolist (th lst)
       (rc/load-theme th)
-      (when (string= "y" (read-string "save? "))
+      (when (y-or-n-p "save? ")
         (push th l)))
     l))
 
