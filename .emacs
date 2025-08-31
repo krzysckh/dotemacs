@@ -705,9 +705,11 @@
 
 ;; erc
 (require 'erc)
+(require 'erc-image)
 (add-to-list 'erc-modules 'nicks)
 (add-to-list 'erc-modules 'log)
 (add-to-list 'erc-modules 'notifications)
+(add-to-list 'erc-modules 'image)
 ;; (add-to-list 'erc-modules 'spelling)
 
 (setq erc-log-channels-directory "~/irclogs/")
