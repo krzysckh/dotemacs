@@ -703,6 +703,15 @@
 (rc/start-evaluator)
 (add-hook 'kill-emacs-hook #'rc/stop-evaluator)
 
+;; ssh
+(defun rc/ssh (user server point)
+  (interactive
+   (list
+    (read-string "User: " (user-login-name))
+    (read-string "Server: ")
+    (read-string "Directory or filename: ")))
+  (find-file (format "/scpx:%s@%s:%s" user server point)))
+
 ;; erc
 (require 'erc)
 (require 'erc-image)
