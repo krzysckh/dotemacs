@@ -721,6 +721,9 @@
 (add-to-list 'erc-modules 'image)
 ;; (add-to-list 'erc-modules 'spelling)
 
+;; TODO: does this work
+(setf erc-hide-list '("JOIN" "PART" "QUIT"))
+
 (setq erc-log-channels-directory "~/irclogs/")
 (add-hook 'erc-insert-post-hook 'erc-save-buffer-in-logs)
 
@@ -813,6 +816,19 @@
 (when-system jonagold
   (rc/add-volume-changed-hook 'rc/default-volume-changed-hook-pl)
   (rc/start-sndioctl-monitor))
+
+(defun ligol-unfuck-audio-because-of-my-shitty-solder-job ()
+  (let* ((default-output (shell-command-to-string "pactl get-default-sink | tr -d '\n'"))
+         (cmd (format
+               "pacmd load-module module-remap-sink 'master=%s' sink_name=Reverse-Master sink_properties=device.description=Reversed-master-channel channels=2 channel_map=front-left,front-right master_channel_map=front-right,front-left"
+               default-output)))
+    (message "pacmd ran: %s" (shell-command-to-string cmd))
+    (message
+     "setting the default sink to Reverse-Master: %s"
+     (shell-command-to-string "pactl set-default-sink Reverse-Master"))))
+
+;; (when-system ligol
+;;   (ligol-unfuck-audio-because-of-my-shitty-solder-job))
 
 (require 'exwm-kpm)
 (require 'splash-screen)
