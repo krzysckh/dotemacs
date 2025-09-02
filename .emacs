@@ -827,8 +827,8 @@
      "setting the default sink to Reverse-Master: %s"
      (shell-command-to-string "pactl set-default-sink Reverse-Master"))))
 
-;; (when-system ligol
-;;   (ligol-unfuck-audio-because-of-my-shitty-solder-job))
+(when-system ligol
+  (ligol-unfuck-audio-because-of-my-shitty-solder-job))
 
 (require 'exwm-kpm)
 (require 'splash-screen)
