@@ -674,34 +674,36 @@
 
 ;; local socket-based eval server
 
-(defvar rc/evaluator-proc-name "*evaluator*")
-(defvar rc/evaluator-buffer-name "*evaluator buffer*")
-(defvar rc/evaluator-socket "~/.emacs-evaluator")
-(defvar rc/evaluator-proc nil)
+;; nah i don't need an evaluator anymore when everything is emacs
 
-(defun rc/start-evaluator ()
-  (when (or (f-exists-p rc/evaluator-socket) rc/evaluator-proc)
-    (rc/stop-evaluator))
+;; (defvar rc/evaluator-proc-name "*evaluator*")
+;; (defvar rc/evaluator-buffer-name "*evaluator buffer*")
+;; (defvar rc/evaluator-socket "~/.emacs-evaluator")
+;; (defvar rc/evaluator-proc nil)
 
-  (setq rc/evaluator-proc
-        (make-network-process
-         :name rc/evaluator-proc-name
-         :buffer rc/evaluator-buffer-name
-         :family 'local
-         :local (expand-file-name rc/evaluator-socket)
-         :service (expand-file-name rc/evaluator-socket)
-         :filter (lambda (_ str)
-                   (message "evaluator: %s" str)
-                   (eval (read str) t))
-         :server t)))
+;; (defun rc/start-evaluator ()
+;;   (when (or (f-exists-p rc/evaluator-socket) rc/evaluator-proc)
+;;     (rc/stop-evaluator))
 
-(defun rc/stop-evaluator ()
-  (ignore-errors (delete-process rc/evaluator-proc))
-  (ignore-errors (delete-file (expand-file-name rc/evaluator-socket)))
-  (setq rc/evaluator-proc nil))
+;;   (setq rc/evaluator-proc
+;;         (make-network-process
+;;          :name rc/evaluator-proc-name
+;;          :buffer rc/evaluator-buffer-name
+;;          :family 'local
+;;          :local (expand-file-name rc/evaluator-socket)
+;;          :service (expand-file-name rc/evaluator-socket)
+;;          :filter (lambda (_ str)
+;;                    (message "evaluator: %s" str)
+;;                    (eval (read str) t))
+;;          :server t)))
 
-(rc/start-evaluator)
-(add-hook 'kill-emacs-hook #'rc/stop-evaluator)
+;; (defun rc/stop-evaluator ()
+;;   (ignore-errors (delete-process rc/evaluator-proc))
+;;   (ignore-errors (delete-file (expand-file-name rc/evaluator-socket)))
+;;   (setq rc/evaluator-proc nil))
+
+;; (rc/start-evaluator)
+;; (add-hook 'kill-emacs-hook #'rc/stop-evaluator)
 
 ;; ssh
 (defun rc/ssh (user server point)
@@ -745,7 +747,8 @@
 (defun rc/start-erc ()
   (interactive)
   (rc/erc-bouncer-connect-to "irc.libera.chat"       'libera)
-  (rc/erc-bouncer-connect-to "colonq.computer:26697" 'clonk))
+  (rc/erc-bouncer-connect-to "colonq.computer:26697" 'clonk)
+  (rc/erc-bouncer-connect-to "irc.oftc.net"          'oftc))
 
 (defun rc/erc-connect-to-twitch-dot-tv ()
   (let ((oauth (f-read-text "~/txt/twitch.tv.oauth"))
