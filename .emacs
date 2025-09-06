@@ -57,7 +57,8 @@
 (defun rc/load-theme (theme)
   (rc/disable-other-themes)
   (load-theme theme :no-confirm)
-  (set-mouse-color (ef-themes-get-color-value 'fg-main)))
+  (set-mouse-color (ef-themes-get-color-value 'fg-main))
+  (run-hooks 'rc/update-theme-hook))
 
 (defun rc/load-random-theme (&optional type)
   (if type
@@ -309,8 +310,6 @@
 
 (setq additional-lisp-path "~/.emacs.d/lisp/")
 
-(rc/load-gui)
-
 (when-system ligol
   (rc/set-font "Lilex" "17")
   (load (expand-file-name "~/quicklisp/slime-helper.el"))
@@ -353,6 +352,7 @@
      feeds.el
      0x0-dirtyfix.el
      exwm-kpm.el
+     dunst-ef.el
      ))
   (ignore-errors (kelp/update)))
 
@@ -832,6 +832,11 @@
 
 (when-system ligol
   (ligol-unfuck-audio-because-of-my-shitty-solder-job))
+
+(require 'dunst-ef)
+(add-hook 'rc/update-theme-hook 'def/update-dunstrc)
+
+(rc/load-gui)
 
 (require 'exwm-kpm)
 (require 'splash-screen)
