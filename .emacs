@@ -836,6 +836,11 @@
 (require 'dunst-ef)
 (add-hook 'rc/update-theme-hook 'def/update-dunstrc)
 
+(when-system jonagold
+  (setf def/font-size 8))
+(when-system ligol
+  (setf def/font-size 10))
+
 (rc/load-gui)
 
 (require 'exwm-kpm)
