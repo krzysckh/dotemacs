@@ -353,6 +353,7 @@
      0x0-dirtyfix.el
      exwm-kpm.el
      dunst-ef.el
+     react.el
      ))
   (ignore-errors (kelp/update)))
 
@@ -842,6 +843,9 @@
   (setf def/font-size 10))
 
 (rc/load-gui)
+
+(require 'react)
+(react/connect "fuji")
 
 (require 'exwm-kpm)
 (require 'splash-screen)
