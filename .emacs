@@ -541,6 +541,9 @@
 (setq scheme-program-name "olr") ;; olr = ol -r
 (setq eldoc-minor-mode-string " eld")
 
+(require 'dired)
+(setq dired-dwim-target t)
+
 (ido-mode 1)
 (ido-ubiquitous-mode)
 ;; (flx-ido-mode nil)
@@ -917,7 +920,8 @@
          rc-mode rust-mode rustic show-font shut-up smarty-mode smex
          soap-client ssh-config-mode tco tramp try typescript-mode tzc
          undo-tree use-package uxntal-mode verilog-mode vterm
-         vterm-toggle w3m wakatime-mode web-mode which-key
-         window-tool-bar ws-butler xref yaml-mode yaml-tomato))
+         vterm-toggle w3m wakatime-mode web-beautify web-mode
+         which-key window-tool-bar ws-butler xref yaml-mode
+         yaml-tomato))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
