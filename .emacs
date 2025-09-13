@@ -271,6 +271,10 @@
       t
     (null (request-response-error-thrown (request (or host "https://kelp.krzysckh.org") :timeout 2 :sync t)))))
 
+(defun rc/crontab ()
+  (interactive)
+  (with-editor-async-shell-command "crontab -e"))
+
 (defun rc/eshellp (s)
   (ignore-errors
     (string= (substring s 0 7) "*eshell")))
@@ -906,22 +910,22 @@
  '(package-selected-packages
    '(0x0 acme-theme all-the-icons ansi basic-mode bind-key cask-mode
          chordpro-mode commander company company-jedi company-php
-         company-quickhelp company-web crux csharp-mode ctable
-         dhall-mode dockerfile-mode editorconfig ef-themes eglot
-         elfeed epl erc erc-image evil evil-collection evil-numbers
-         exiftool exwm exwm-firefox-evil faceup fennel-mode flx-ido
-         flycheck flymake git gnu-apl-mode gnuplot gnuplot-mode
-         go-mode gradle-mode gruber-darker-theme haskell-mode helpful
-         idlwave ido-completing-read+ indent-guide janet-mode
-         js-comint keycast lice ligature lsp-java lsp-mode lsp-ui
-         lua-mode magit merlin-company nasm-mode notmuch
-         notmuch-transient nsis-mode org pdf-tools perl-doc project
-         purescript-mode python pyvenv racket-mode rainbow-mode
-         rc-mode rust-mode rustic show-font shut-up smarty-mode smex
-         soap-client ssh-config-mode tco tramp try typescript-mode tzc
-         undo-tree use-package uxntal-mode verilog-mode vterm
-         vterm-toggle w3m wakatime-mode web-beautify web-mode
-         which-key window-tool-bar ws-butler xref yaml-mode
-         yaml-tomato))
+         company-quickhelp company-web crontab-mode crux csharp-mode
+         ctable dhall-mode dockerfile-mode editorconfig ef-themes
+         eglot elfeed epl erc erc-image evil evil-collection
+         evil-numbers exiftool exwm exwm-firefox-evil faceup
+         fennel-mode flx-ido flycheck flymake git gnu-apl-mode gnuplot
+         gnuplot-mode go-mode gradle-mode gruber-darker-theme
+         haskell-mode helpful idlwave ido-completing-read+
+         indent-guide janet-mode js-comint keycast lice ligature
+         lsp-java lsp-mode lsp-ui lua-mode magit merlin-company
+         nasm-mode notmuch notmuch-transient nsis-mode org pdf-tools
+         perl-doc project purescript-mode python pyvenv racket-mode
+         rainbow-mode rc-mode rust-mode rustic show-font shut-up
+         smarty-mode smex soap-client ssh-config-mode tco tramp try
+         typescript-mode tzc undo-tree use-package uxntal-mode
+         verilog-mode vterm vterm-toggle w3m wakatime-mode
+         web-beautify web-mode which-key window-tool-bar ws-butler
+         xref yaml-mode yaml-tomato))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
