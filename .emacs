@@ -545,6 +545,9 @@
 (setq scheme-program-name "olr") ;; olr = ol -r
 (setq eldoc-minor-mode-string " eld")
 
+(setf tramp-shell-prompt-pattern "\\(?:^\\|\\)[^]\n#-%>]*#?[]#-%λ>][[:blank:]]*")
+;                                                                 ^- this guy made it hang on openbsd
+
 (require 'dired)
 (setq dired-dwim-target t)
 
