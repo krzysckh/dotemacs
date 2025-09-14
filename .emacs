@@ -582,13 +582,13 @@
 ;; TODO: do innego pliku idk.. ~/.emacs.d/lisp/util.el idk idk idk
 (defun plan ()
   (interactive)
-
-  (setq shell-command-buffer-name-async "*plan*")
   (with-current-buffer (get-buffer-create "*plan*")
-    (switch-to-buffer "*plan*")
-    (async-shell-command "plan")
-    (read-only-mode)
-    (text-scale-adjust -1)))
+    (setf buffer-read-only nil)
+    (erase-buffer)
+    (insert (shell-command-to-string "plan"))
+    (setf buffer-read-only t)
+    (text-scale-adjust -1)
+    (switch-to-buffer "*plan*")))i
 
 (defun dos2unix ()
   (interactive)
