@@ -588,7 +588,7 @@
     (insert (shell-command-to-string "plan"))
     (setf buffer-read-only t)
     (text-scale-adjust -1)
-    (switch-to-buffer "*plan*")))i
+    (switch-to-buffer "*plan*")))
 
 (defun dos2unix ()
   (interactive)
