@@ -549,7 +549,8 @@
 ;                                                                 ^- this guy made it hang on openbsd
 
 (require 'dired)
-(setq dired-dwim-target t)
+(setq dired-dwim-target t
+      dired-mouse-drag-files t)
 
 (ido-mode 1)
 (ido-ubiquitous-mode)
@@ -911,11 +912,11 @@
                   :image-converter
                   ("convert -density %D -trim -antialias %f -quality 100 %O"))))
  '(package-selected-packages
-   '(0x0 acme-theme all-the-icons ansi basic-mode bind-key cask-mode
-         chordpro-mode commander company company-jedi company-php
-         company-quickhelp company-web crontab-mode crux csharp-mode
-         ctable dhall-mode dockerfile-mode editorconfig ef-themes
-         eglot elfeed epl erc erc-image evil evil-collection
+   '(0x0 acme-theme all-the-icons ansi basic-mode bind-key bison-mode
+         cask-mode chordpro-mode commander company company-jedi
+         company-php company-quickhelp company-web crontab-mode crux
+         csharp-mode ctable dhall-mode dockerfile-mode editorconfig
+         ef-themes eglot elfeed epl erc erc-image evil evil-collection
          evil-numbers exiftool exwm exwm-firefox-evil faceup
          fennel-mode flx-ido flycheck flymake git gnu-apl-mode gnuplot
          gnuplot-mode go-mode gradle-mode gruber-darker-theme
