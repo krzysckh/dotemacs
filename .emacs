@@ -1,19 +1,33 @@
-;; .emacs -*- lexical-binding: t -*-
+;; .emacs --- My .emacs -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 
 (defvar rc/emoji-font "Twemoji Mozilla")
 
 (defmacro when-system (name &rest body)
+  "Execute BODY if system is NAME."
   (declare (indent defun))
-  `(when (string= system-name (format "%s" (quote ,name)))
+  `(when (string= (system-name) (format "%s" (quote ,name)))
      (progn ,@body)))
 
+(defmacro system-cond (&rest cases)
+  "Use cond to match system in CASES."
+  (append
+   '(cond)
+   (cl-loop for it in cases collect `((or (eq t ',(car it)) (string= (system-name) (format "%s" ',(car it))))
+                                      ,@(cdr it)))))
+
 (defmacro ilambda (args &rest body)
+  "Return interactive lambda (λ (ARGS) ... BODY)."
   (declare (indent defun))
   `(lambda (,@args)
      (interactive)
      ,@body))
 
+(defvar rc/additional-lisp-path "~/.emacs.d/lisp/")
+
 (defun rc/disable-other-themes ()
+  "Disable all loaded themes."
   (mapcar #'disable-theme custom-enabled-themes))
 
 (defvar rc/nice-themes
@@ -43,29 +57,34 @@
 
 ;; lst might be for example ef-themes-dark-themes
 (defun rc/pick-nice-themes-from-list (lst)
+  "Interactively get a list of chosen themes from LST."
   (let ((l nil))
     (dolist (th lst)
       (rc/load-theme th)
-      (when (y-or-n-p "save? ")
+      (when (y-or-n-p "Save? ")
         (push th l)))
     l))
 
 (defun rc/pick-random (lst)
+  "Pick random elemnent from LST."
   (let ((n (random (length lst))))
     (nth n lst)))
 
 (defun rc/load-theme (theme)
+  "Load Emacs theme named THEME."
   (rc/disable-other-themes)
   (load-theme theme :no-confirm)
   (set-mouse-color (ef-themes-get-color-value 'fg-main))
   (run-hooks 'rc/update-theme-hook))
 
 (defun rc/load-random-theme (&optional type)
+  "Load random theme of type TYPE."
   (if type
       (rc/load-theme (rc/pick-random (cdr (assoc type rc/nice-themes))))
     (rc/load-theme-dwim)))
 
 (defun rc/load-theme-dwim (&optional maybe-type)
+  "Load random theme.  Optionally pass type via MAYBE-TYPE."
   (let* ((h (string-to-number (format-time-string "%H")))
          (type
           (or maybe-type
@@ -75,6 +94,7 @@
     (rc/load-random-theme type)))
 
 (defun rc/load-gui ()
+  "Load and configure Emacs GUI."
   (rc/load-theme-dwim)
   (scroll-bar-mode 0)
   (column-number-mode 1)
@@ -83,7 +103,7 @@
   (menu-bar-mode 0))
 
 (defun rc/set-font (fnt size)
-  "set the main font to `fnt' with size `size'."
+  "Set the main GUI font to FNT with size SIZE."
   (let ((f (format "%s:pixelsize=%s" fnt size)))
     (set-frame-font f)
     (set-face-font 'default f)
@@ -98,10 +118,11 @@
       :slant 'normal))))
 
 (defun rc/load-evil ()
-  (setq evil-want-minibuffer t)
-  (setq evil-want-C-u-scroll t)
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
+  "Configure and load evil-mode."
+  (defvar evil-want-minibuffer t)
+  (defvar evil-want-C-u-scroll t)
+  (defvar evil-want-integration t)
+  (defvar evil-want-keybinding nil)
   (require 'evil)
   (require 'evil-collection)
   (require 'evil-numbers)
@@ -115,6 +136,7 @@
   (evil-collection-init))
 
 (defun rc/define-ligatures ()
+  "Customize ligatures."
   (require 'ligature)
   (global-prettify-symbols-mode t)
   (ligature-set-ligatures 't '("www"))
@@ -139,10 +161,12 @@
       ))))
 
 (defun rc/other ()
+  "Switch to other buffer."
   (interactive)
   (switch-to-buffer (other-buffer)))
 
 (defun rc/define-keybindings ()
+  "Load base keybindings."
   (require 'inv)
   (require 'rp2040-helpers)
   (evil-define-key '(normal visual) 'global (kbd "]]")
@@ -232,15 +256,18 @@
   )
 
 (defun rc/switch-to-slime-repl-buffer ()
+  "Switch to slime REPL buffer."
   (interactive)
   (switch-to-buffer (slime-repl-buffer)))
 
 (defun rc/download-file (url path)
+  "Download file from URL to PATH."
   (when (not (file-exists-p path))
     (require 'url)
     (url-copy-file url path)))
 
 (defun rc/open-scratch-buffer ()
+  "Open scratch buffer."
   (interactive)
   (if-let ((buf (get-buffer "*scratch*")))
       (switch-to-buffer buf)
@@ -250,43 +277,51 @@
         (switch-to-buffer buf)))))
 
 (defun rc/sudo-edit (filename)
+  "Edit FILENAME as root."
   (let ((method (if (executable-find "doas") "doas" "sudo")))
     (find-file (format "/%s:root@localhost:%s" method filename))))
 
 (defun rc/require-lisp (url)
-  (rc/download-file url (concat additional-lisp-path (car (last (split-string url "/"))))))
+  "Download Lisp file from URL to rc/additional-lisp-path."
+  (rc/download-file url (concat rc/additional-lisp-path (car (last (split-string url "/"))))))
 
 (defun rc/download-lispfiles ()
-  (when (not (file-directory-p additional-lisp-path))
-    (mkdir additional-lisp-path))
+  "Download custom Lisp files from hacky sources."
+  (when (not (file-directory-p rc/additional-lisp-path))
+    (mkdir rc/additional-lisp-path))
 
-  (add-to-list 'load-path additional-lisp-path)
+  (add-to-list 'load-path rc/additional-lisp-path)
   (rc/require-lisp "https://raw.githubusercontent.com/Naheel-Azawy/holyc-mode.el/00291cebce101456b5ae6e2d45f5139abe463a42/holyc-mode.el")
   (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/micropython-mode/master/micropython-mode.el")
   (rc/require-lisp "https://raw.githubusercontent.com/krzysckh/emacs-splash/master/splash-screen.el")
   )
 
 (defun rc/networkp (&optional host)
+  "Check if network is available by pinging HOST.  Defaults to kelp.krzysckh.org."
   (if (eq system-type 'windows-nt)
       t
     (null (request-response-error-thrown (request (or host "https://kelp.krzysckh.org") :timeout 2 :sync t)))))
 
 (defun rc/crontab ()
+  "Edit crontab."
   (interactive)
   (with-editor-async-shell-command "crontab -e"))
 
 (defun rc/eshellp (s)
+  "Check if buffer with name S is an eshell, or an eshell-like buffer."
   (ignore-errors
     (string= (substring s 0 7) "*eshell")))
 
 ;; hack warning: will not work if n of eshells > 9
 (defun rc/eshell-menu ()
+  "Interactively ask for eshell buffer to switch to."
   (interactive)
   (let ((eshells (cl-sort (--filter (not (null it)) (-filter #'rc/eshellp (-map #'buffer-name (buffer-list)))) #'string-lessp))
         (buf (get-buffer-create "*rc/eshell-menu*")))
     (with-current-buffer buf
       (pop-to-buffer buf '(display-buffer--maybe-at-bottom))
       (let* ((exit-chars '(?q ?n))
+             (char nil)
              (prompt (format "Choose an eshell buffer or create a new one:\n[n]: create\n%s"
                              (apply #'(lambda (&rest l) (string-join l nil))
                                     (--map (prog1 (format
@@ -311,8 +346,6 @@
           (quit-window t)
           (switch-to-buffer (nth (- (string-to-number (char-to-string char)) 1) eshells))))
         (kill-buffer buf)))))
-
-(setq additional-lisp-path "~/.emacs.d/lisp/")
 
 (when-system ligol
   (rc/set-font "Lilex" "17")
@@ -372,6 +405,7 @@
 (rc/download-file "https://pub.krzysckh.org/bsd-3-clause-clear" "~/.lice/bsd-3-clause-clear")
 
 (defun about-emacs ()
+  "Switch to scratch buffer.  Overwrites the default."
   (interactive)
   (switch-to-buffer "*scratch*"))
 
@@ -391,6 +425,7 @@
 (require 'eglot)
 ;; disable eglto in holyc-mode
 (defun eglot-maybe-ensure ()
+  "Ensure eglot unless loaded in holyc-mode.  Clangd is quite unholy."
   (unless (derived-mode-p 'holyc-mode)
     (eglot-ensure)))
 
@@ -415,6 +450,7 @@
 (add-to-list 'display-buffer-alist `("^\\*yt-handler\\*$" . (,#'(lambda (&rest _) _) . nil)))
 
 (defun yt-handler (url &rest args)
+  "Open URL (youtube link) in mpv.  Ignore ARGS."
   (let ((buf (get-buffer-create "*yt-handler*")))
     (with-current-buffer buf
       (erase-buffer)
@@ -422,6 +458,7 @@
       (async-shell-command (concat "mpv '" url "'") buf buf))))
 
 (defun yt (url &rest _)
+  "Open URL (youtube link with yt-handler."
   (interactive)
   (when-let ((id (inv/videop url)))
     (yt-handler (concat "https://youtube.com/watch?v=" id))))
@@ -429,15 +466,17 @@
 (setq browse-url-handlers `((,#'inv/videop . ,#'yt)))
 ;; (setq browse-url-handlers (list (cons #'inv/videop #'(lambda (url &rest _) (yt-handler (concat "https://youtube.com/watch?v=" (inv/videop url)))))))
 
-(defun elfeed-update-yt (auth)
-  (interactive
-   (list (read-string "piped.video Authorization: ")))
-  (call-process-shell-command
-   (concat "sh -c 'curl -H \"Authorization: " auth "\" https://pipedapi.kavin.rocks/subscriptions > /tmp/sub.json"
-           " && subjson2elfeed.pl /tmp/sub.json")))
+;;; TODO: delete this
+;; (defun elfeed-update-yt (auth)
+;;   (interactive
+;;    (list (read-string "piped.video Authorization: ")))
+;;   (call-process-shell-command
+;;    (concat "sh -c 'curl -H \"Authorization: " auth "\" https://pipedapi.kavin.rocks/subscriptions > /tmp/sub.json"
+;;            " && subjson2elfeed.pl /tmp/sub.json")))
 
 ;; TODO: check for future name clashes
 (defun elfeed-load-feeds ()
+  "Load feeds I follow."
   (setf elfeed-feeds nil)
   (if (require 'feeds nil 1)
       (setq elfeed-feeds *followed-rss-feeds*)
@@ -455,6 +494,7 @@
 ;;   (setq elfeed-feeds (append elfeed-feeds elfeed-youtube-rss-feeds)))
 
 (defun elfeed-mark-all-read ()
+  "Mark all elfeed items in current view as read."
   (interactive)
   (mark-whole-buffer)
   (elfeed-search-untag-all-unread))
@@ -487,6 +527,7 @@
 
 (setq c-astyle-command "astyle --style='k&r' --indent=spaces=2 -xB")
 (defun astyle (pmin pmax)
+  "Run astyle between PMIN and PMAX."
   (interactive "r")
   (shell-command-on-region
    pmin pmax
@@ -570,6 +611,7 @@
 
 ;; line numbers
 (defun run-line-mode ()
+  "Use 'display-line-numbers-mode' in relative style."
   (display-line-numbers-mode)
   (setq display-line-numbers 'relative))
 (add-hook 'prog-mode-hook #'run-line-mode)
@@ -582,6 +624,7 @@
 
 ;; TODO: do innego pliku idk.. ~/.emacs.d/lisp/util.el idk idk idk
 (defun plan ()
+  "Pokaż plan zajęć."
   (interactive)
   (with-current-buffer (get-buffer-create "*plan*")
     (setf buffer-read-only nil)
@@ -592,13 +635,16 @@
     (switch-to-buffer "*plan*")))
 
 (defun dos2unix ()
+  "Change coding in currennt buffer to unix.  Replace \r\n with \n."
   (interactive)
   (set-buffer-file-coding-system 'unix 't))
 
 (defun zzz ()
+  "Zone out fancy style."
   (interactive)
   (require 'zone)
   ;; difference between emacs 29.1 on my laptop, and whatever i have on my debian
+  ;; fixed as of sept. 2025 as onw both run 30
   (cond
    ((listp zone-programs)  (setq zone-programs '(zone-pgm-five-oclock-swan-dive)))
    ((arrayp zone-programs) (setq zone-programs [zone-pgm-five-oclock-swan-dive])))
@@ -610,12 +656,12 @@
 ;; whatever
 ;; e.g. for https://haybcoffee.pl/produkt/sie-przelewa-kwiat/
 ;; (price-per-cup 49 250 18) ; => 3.528 [pln]
-(defun price-per-cup (price per grams-in-cup)
-  (let ((n-cups (/ (float per) (float grams-in-cup))))
-    (/ (float price) n-cups)))
+;; (defun price-per-cup (price per grams-in-cup)
+;;   (let ((n-cups (/ (float per) (float grams-in-cup))))
+;;     (/ (float price) n-cups)))
 
 (defun search-in-evil-collection (mode)
-  "searches evil-collection for `mode' and - if found - opens up a new buffer with the file that defines keybindings for it"
+  "Search 'evil-collection' for MODE and — if found — open up a new buffer with the file that defines keybindings for it."
   (interactive
    (let ((cur (symbol-name major-mode)))
      (list (read-string (concat "search for mode [default: " cur "]: ") nil nil cur))))
@@ -628,21 +674,23 @@
                   (t (car files)))))
     (find-file chosen)))
 
-(defun reload-file-variables ()
-  (interactive)
-  (normal-mode))
-
+;;; TODO: is this used?
 (defun kill-all-buffers ()
+  "Kill all buffers."
   (interactive)
-  (when (y-or-n-p "kill-all-buffers?")
+  (when (y-or-n-p "Kill-all-buffers?")
    (mapcar #'kill-buffer (mapcar #'buffer-name (buffer-list)))))
 
+;;; TODO: rewrite in elisp
 (defun olr ()
+  "Run Owl Lisp REPL."
   (interactive)
   (comint-run "olr"))
 
 (defun eww-preview-current-buffer ()
+  "Preview current buffer in eww."
   (interactive)
+  (require 'eww)
   (let ((buf (get-buffer-create (concat (buffer-name) " - HTML preview"))))
     (eww-display-html 'utf8 (buffer-name) nil nil buf)
     (switch-to-buffer buf)))
@@ -651,13 +699,14 @@
 (require 'eshell)
 (require 'em-alias)
 
+;;; TODO: why exactly is it defined?
 (defun eshell-write-aliases-list ()
   0)
 
 ;; TODO: write this in a cuter way
-(setq shrc (if (string= system-name "ligol")
-               (expand-file-name "~/.bashrc")
-             (expand-file-name "~/.kshrc")))
+(setq shrc (system-cond
+            (ligol    (expand-file-name "~/.bashrc"))
+            (jonagold (expand-file-name "~/.kshrc"))))
 
 ;; load aliases to eshell from `shrc' file
 (when (file-exists-p shrc)
@@ -673,6 +722,7 @@
     (funcall #'eshell/alias (car l) (cadr l))))
 
 (defun abbrevize (l)
+  "Abbrevize month names from L."
   (apply #'vector (mapcar (lambda (s) (substring s 0 3)) l)))
 
 (setq calendar-month-name-array ["Styczeń" "Luty" "Marzec" "Kwiecień" "Maj" "Czerwiec" "Lipiec" "Sierpień" "Wrzesień" "Październik" "Listopad" "Grudzień"])
@@ -719,6 +769,7 @@
 
 ;; ssh
 (defun rc/ssh (user server point)
+  "Run scpx as USER on SERVER on POINT."
   (interactive
    (list
     (read-string "User: " (user-login-name))
@@ -742,27 +793,34 @@
 (add-hook 'erc-insert-post-hook 'erc-save-buffer-in-logs)
 
 (defun rc/get-irc-password-for (s)
+  "Get irc password from a server S from a plaintext file."
   (f-read-text (format "~/txt/irc/%s.password" s))) ; very safe
 
+(defvar rc/irc-bouncer-server "krzysckh.org")
+
 (defun rc/erc-bouncer-connect-to (ip name)
+  "Connect to a bouncer to a server on IP with password sourced from file identified by NAME."
   (erc-tls
-   :server "krzysckh.org"
+   :server rc/irc-bouncer-server
    :port 6697
    :user (format "%s/%s@%s" (user-login-name) ip system-name)
    :password (rc/get-irc-password-for name)))
 
-(defun erc-cmd-HH (&optional line)
+(defun erc-cmd-HH (&optional _)
+  "Get latest 50 messages from bouncer."
   (let ((chan (current-buffer)))
     (erc-with-server-buffer
       (erc-server-send (format "CHATHISTORY LATEST %s * 50" chan)))))
 
 (defun rc/start-erc ()
+  "Start erc.  Connect to servers via my bouncer."
   (interactive)
   (rc/erc-bouncer-connect-to "irc.libera.chat"       'libera)
   (rc/erc-bouncer-connect-to "colonq.computer:26697" 'clonk)
   (rc/erc-bouncer-connect-to "irc.oftc.net"          'oftc))
 
 (defun rc/erc-connect-to-twitch-dot-tv ()
+  "Connect to twitch dot tuvalu via erc."
   (let ((oauth (f-read-text "~/txt/twitch.tv.oauth"))
         (nick  (f-read-text "~/txt/twitch.tv.nickname")))
     (erc-tls
@@ -796,12 +854,14 @@
 (require 'notifications)
 
 (defvar rc/volume-changed-hooks nil
-  "List of hooks to run after volume has been changed on one of the devices. The correct signature is (λ (&key device &key volume) ...)")
+  "List of hooks to run after volume has been changed on one of the devices.  The correct signature is (λ (&key device &key volume) ...).")
 
 (defun rc/add-volume-changed-hook (hook)
+  "Add a hook HOOK to rc/volume-changed-hooks."
   (add-to-list 'rc/volume-changed-hooks hook))
 
 (defun rc/sndioctl-monitor-parser (str)
+  "Parser for sndioctl monitor mode.  STR contains input lines."
   (dolist (it (string-split str "\n"))
     (when (string-match "\\(?1:[^=]+\\)=\\(?2:[^ ]+\\).*$" it)
       (let ((a (match-string 1 it))
@@ -810,15 +870,18 @@
           (funcall h :device a :volume (string-to-number b)))))))
 
 (defun rc//run-monitor-parser (a b &rest _)
+  "Run rc/sndioctl-monitor-parser on a buffer substring A B."
   (rc/sndioctl-monitor-parser (buffer-substring-no-properties a b)))
 
 (defun rc/start-sndioctl-monitor ()
+  "Start sndioctl monitor."
   (let ((buf (get-buffer-create " *Volume notification sndioctl process*")))
     (with-current-buffer buf
       (add-hook 'after-change-functions 'rc//run-monitor-parser nil t)
       (start-process "sndioctl" buf "sndioctl" "-m"))))
 
 (defun rc/default-volume-changed-hook-pl (&key device &key volume)
+  "Default volume changed hook in polish.  Show a notificatoin about DEVICE changing VOLUME."
   (when (string= device "output[0].level")
     (notifications-notify
      :title    (format "Zmieniono głośność na %0.2f" (* volume 100))
@@ -833,6 +896,7 @@
   (rc/start-sndioctl-monitor))
 
 (defun ligol-unfuck-audio-because-of-my-shitty-solder-job ()
+  "Unfuck ligol audio by reversing left/right channels."
   (let* ((default-output (shell-command-to-string "pactl get-default-sink | tr -d '\n'"))
          (cmd (format
                "pacmd load-module module-remap-sink 'master=%s' sink_name=Reverse-Master sink_properties=device.description=Reversed-master-channel channels=2 channel_map=front-left,front-right master_channel_map=front-right,front-left"
@@ -848,15 +912,16 @@
 (require 'dunst-ef)
 (add-hook 'rc/update-theme-hook 'def/update-dunstrc)
 
-(when-system jonagold
-  (setf def/font-size 8))
-(when-system ligol
-  (setf def/font-size 10))
+(setf def/font-size (system-cond
+                     (jonagold 8)
+                     (ligol    10)
+                     (t        10)))
 
 (rc/load-gui)
 
-(require 'react)
-(react/connect "fuji")
+(when-system ligol
+  (require 'react)
+  (react/connect "fuji"))
 
 (require 'exwm-kpm)
 (require 'splash-screen)
@@ -918,17 +983,17 @@
          csharp-mode ctable dhall-mode dockerfile-mode editorconfig
          ef-themes eglot elfeed epl erc erc-image evil evil-collection
          evil-numbers exiftool exwm exwm-firefox-evil faceup
-         fennel-mode flx-ido flycheck flymake git gnu-apl-mode gnuplot
-         gnuplot-mode go-mode gradle-mode gruber-darker-theme
-         haskell-mode helpful idlwave ido-completing-read+
-         indent-guide janet-mode js-comint keycast lice ligature
-         lsp-java lsp-mode lsp-ui lua-mode magit merlin-company
-         nasm-mode notmuch notmuch-transient nsis-mode org pdf-tools
-         perl-doc project purescript-mode python pyvenv racket-mode
-         rainbow-mode rc-mode rust-mode rustic show-font shut-up
-         smarty-mode smex soap-client ssh-config-mode tco tramp try
-         typescript-mode tzc undo-tree use-package uxntal-mode
-         verilog-mode vterm vterm-toggle w3m wakatime-mode
+         fennel-mode flx-ido flycheck flycheck-elsa flymake git
+         gnu-apl-mode gnuplot gnuplot-mode go-mode gradle-mode
+         gruber-darker-theme haskell-mode helpful idlwave
+         ido-completing-read+ indent-guide janet-mode js-comint
+         keycast lice ligature lsp-java lsp-mode lsp-ui lua-mode magit
+         merlin-company nasm-mode notmuch notmuch-transient nsis-mode
+         org pdf-tools perl-doc project purescript-mode python pyvenv
+         racket-mode rainbow-mode rc-mode rust-mode rustic show-font
+         shut-up smarty-mode smex soap-client ssh-config-mode tco
+         tramp try typescript-mode tzc undo-tree use-package
+         uxntal-mode verilog-mode vterm vterm-toggle w3m wakatime-mode
          web-beautify web-mode which-key window-tool-bar ws-butler
          xref yaml-mode yaml-tomato))
  '(warning-suppress-log-types '((comp) (comp)))
