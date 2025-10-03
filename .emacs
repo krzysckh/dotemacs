@@ -779,12 +779,11 @@
 
 ;; erc
 (require 'erc)
-(require 'erc-image)
+;; (require 'erc-image)
 (add-to-list 'erc-modules 'nicks)
 (add-to-list 'erc-modules 'log)
 (add-to-list 'erc-modules 'notifications)
-(add-to-list 'erc-modules 'image)
-;; (add-to-list 'erc-modules 'spelling)
+;; (add-to-list 'erc-modules 'image)
 
 ;; TODO: does this work
 (setf erc-hide-list '("JOIN" "PART" "QUIT"))
