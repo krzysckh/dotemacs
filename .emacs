@@ -890,9 +890,9 @@
      :urgency  'low
      :timeout  500)))
 
-(when-system jonagold
-  (rc/add-volume-changed-hook 'rc/default-volume-changed-hook-pl)
-  (rc/start-sndioctl-monitor))
+;; (when-system jonagold
+;;   (rc/add-volume-changed-hook 'rc/default-volume-changed-hook-pl)
+;;   (rc/start-sndioctl-monitor))
 
 (defun ligol-unfuck-audio-because-of-my-shitty-solder-job ()
   "Unfuck ligol audio by reversing left/right channels."
